@@ -1,0 +1,284 @@
+---
+title: "Introduction to Making Presentation Slides \n with Xaringan"
+author: "Shunkei Kakimoto" 
+subtitle: APEC Skill Seminar
+output:
+  xaringan::moon_reader:
+    css: "xaringan-themer.css"
+    # css: "svm-xaringan-style.css"
+    # css: "modified-svm-xaringan-style.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+---
+class: middle
+
+
+```{r, include = F, cache = FALSE}
+here::i_am("GitControlled/Recitation/1_Introduction/recitation1_slides.rmd")
+```
+
+
+```{r, child = 'setup.rmd', cache = FALSE}
+```
+
+```{r, child = 'PrepareResults.rmd', cache=FALSE}
+```
+
+.content-box-green[**A Useful tip:**]
+
+hitting letter "o" key will give you a panel view of the slides
+
+---
+# Outline
+
+1.Short introduction ()
+2.Flavor of presentation slide 
+3.How to make presentation slides with xaringan?
+
++ How does it work? 
+
+4.xaringanExtra
+
+---
+class: middle
+
+## Source materials for this session: 
+
++ 
+
+
+R Markdown: The Definitive Guide [here](https://bookdown.org/yihui/rmarkdown/)
+
++ `r Citet(xie2018r, "deschenes2007economic")` ["R markdown: The definitive guide"](https://bookdown.org/yihui/rmarkdown/#ref-xie2015)
+
+
+---
+class: middle
+
+How do you make your presentation slide?
+
++ Beamer?
++ Power Point?
+
+xaringan presentation!
+
++ Especially, it works well if you want present your results with `R` or `python`. 
+
+???
++ Well there are lots of options to make presentation slides. I think the most common ways is to 
+
++ We mostly create figures and tables with some 
+
+
+---
+class: middle
+
+## What's is `xaringan` package?
+
+
+
+---
+class: middle
+
+
+---
+class: middle
+
+
+For more details, see
+
+[xaringan Presentations](https://bookdown.org/yihui/rmarkdown/xaringan.html)
+
+
+
+
+---
+class: inverse, center, middle
+name: intro
+
+# Flavor of xiaringan presentation
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+???
++ Well there are tons of useful functionalities in xiaringan package. 
++ Here, I would like to introduce the flavor of xaringan presentation with my slides I used for my recitation session.
+
+---
+class: middle
+
+# Math
+
+Almost the same syntax as in `Latex` 
+
+.content-box-green[**Example (1) Inline math expressions**]:
+```
+$\omega_1=(6,10)$ and $\omega_2=(6,0)$
+```
+yields
+
+$\omega_1=(6,10)$ and $\omega_2=(6,0)$
+
+<br>
+
+.content-box-green[**Example (2) Equation**]
+
+```
+$$U_j(x_j, y) = x_j + \theta_j ln \, y$$
+```
+
+yields
+
+$$U_j(x_j, y) = x_j + \theta_j ln \, y$$
+
+---
+class: middle
+
+.content-box-green[**Example (3) Equation**]
+```
+\begin{aligned}
+\max_{x_1,y_1} \quad & U_1(x_1, y_1)=x_1y_1 \\
+\textrm{s.t.} \quad & max[x_2, y_2] = \overline{u_2} \\
+  & x_1 + x_2 = 16 \\
+  & y_1 + y_2 = 16
+\end{aligned}
+```
+
+yields
+
+\begin{aligned}
+\max_{x_1,y_1} \quad & U_1(x_1, y_1)=x_1y_1 \\
+\textrm{s.t.} \quad & max[x_2, y_2] = \overline{u_2} \\
+  & x_1 + x_2 = 16 \\
+  & y_1 + y_2 = 16
+\end{aligned}
+
+
+---
+class: middle
+
+## Figures
+
+
+
+---
+class: middle
+
+## Figures: map with `leaflet`
+
+.medium-code[
+.panelset[ 
+<!-- Map 1 -->
+.panel[.panel-name[Code for Map 1]
+```{r, echo=TRUE}
+if (!require("pacman")) install.packages("pacman")
+
+# === For example the boundary of MN=== #
+pacman::p_load("tigris", "sf", "dplyr", "tmap", "leaflet")
+
+# --- Download shapefile for MN --- #
+mn_bd <- 
+  states(cb = FALSE, ) %>%
+  filter(STUSPS=="MN")
+
+# --- Visualization with leaflet --- #
+map_mn_bd <- 
+  tmap_leaflet(
+    tm_shape(mn_bd)+
+    tm_borders(col="blue") +
+    tm_text("STUSPS", size = 2)
+  ) %>%
+  addTiles(group = "Esri.WorldTopoMap")
+```
+  ]
+
+.panel[.panel-name[Map 1]
+```{r}
+map_mn_bd
+```
+  ]
+
+.panel[.panel-name[Code for Map 2]
+
+```{r, echo=TRUE}
+# === Digital map of aquifer boundary for the High Plains aquifer === #
+# Download the data from the website of USGS
+
+# download.file(
+#   url = "https://www.sciencebase.gov/catalog/file/get/6314061bd34e36012efa397b?f=__disk__39%2F00%2Fb6%2F3900b621917a747319cd00a5ecb647623a500dae", 
+#   here("Data/hpa_bd.zip")
+#   )
+
+# unzip(
+#   zipfile = here("Data/hpa_bd.zip"),
+#   exdir = here("Data/hpa_bd")
+#   )
+
+hpa_bd <- 
+  st_read("Data/hpa_bd/hp_bound2010.shp")
+
+
+```
+
+
+
+
+
+]
+]
+
+---
+class: middle
+
+## Tables
+
+<!-- Linear regression table -->
+
+
+
+---
+class: middle
+
+## Animation with `gganimate`
+
+.content-box-green[**Example (1): Relationship between CDF and PDF**]
++ **From CDF to PDF**: $f(x) = \frac{d}{dx}F(x)$ </br> (by definition of PDF)
+
++ **From PDF to CDF**: $F(x) = Pr(X \leq x) = \int_{-\infty}^x f(t) dt$ </br> (as shown below)
+
+
+```{r, dpi=36, cache=F, echo=F, out.width = "80%"}
+new_gif
+```
+
+---
+class: middle
+
+.content-box-green[**Example (1): Relationship between CDF and PDF**]
+
+
+```{r}
+animate(p1_annimate, fps = 20, duration = 5)
+```
+
+
+---
+class: inverse, center, middle
+name: intro
+
+# How to make presentation slides with xaringan
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+---
+
+
+
+---
+class: middle
+
+
+
+
