@@ -2,8 +2,12 @@
 library(here)
 library(data.table)
 library(foreach)
-library(ggplot2)
 library(dplyr)
+library(sf)
+library(tmap)
+library(leaflet)
+library(ggplot2)
+library(magick)
 library(gganimate)
 library(ggtext)
 library(gifski)
@@ -11,8 +15,8 @@ library(gapminder)
 ```
 
 ```{r, eval=F}
-# httpgd::hgd()
-# httpgd::hgd_browse()
+httpgd::hgd()
+httpgd::hgd_browse()
 ```
 
 
@@ -34,7 +38,7 @@ plot_theme <-
 
 
 
-## Map 
+## Map
 
 ```{r, eval=FALSE}
 # === Digital map of aquifer boundary for the High Plains aquifer === #
@@ -54,7 +58,7 @@ unzip(
 
 
 ---
-# Tables
+# Regression Tables
 
 ```{r}
 
@@ -63,9 +67,9 @@ unzip(
 
 ---
 
-# Examples: Animation 
+# Examples: Animation
 
-## Animation: Utility maximization
+## Animation: Utility maximization (General Equilibrium)
 ```{r, cache=FALSE}
 # /*===== BC line =====*/
 gen_BC_dt <- function(p_x, p_y, w_x, w_y){
@@ -82,9 +86,7 @@ gen_BC_dt <- function(p_x, p_y, w_x, w_y){
   return(budget_dt)
 }
 
-
-
-ls_u1_bar <- 2:5
+ls_u1_bar <- 2:4
 
 # /*===== BC data =====*/
 bc1_dt <- 
@@ -101,9 +103,10 @@ bc1_dt <-
     return(temp_bc1_dt)
 }
 
-# /*===== IC data =====*/
+# === IC data when u_1 = x_1 y_1 === #
 u1_dt <- 
   foreach(i = 1:length(ls_u1_bar), .combine="rbind") %do%{
+    # i = 1
     u_bar <- ls_u1_bar[[i]]
 
     temp_u1_dt <- 
@@ -122,70 +125,49 @@ u1_dt <-
 p1_u_bc_dt <- rbind(u1_dt, bc1_dt)
 
 # plot(bc1_dt$x1, bc1_dt$y1)
-```
 
-
-```{r, eval=T, cache=FALSE}
 p1_annimate <- 
   ggplot(data=p1_u_bc_dt)+
   geom_line(aes(x=x1, y=y1, group=type, color=type))+
   # --- initial endowment --- #
-  annotate("point", x = 4, y = 0, colour = "red", size=2)+
-  # annotate("text", x = 4.1, y = 0, label = expression(omega["1"]))+
+  # annotate("point", x = 4, y = 0, colour = "red", size=2)+
   # --- animation --- #
   theme_bw() +
-  labs(
-    title = "Where is the utility maximizing bundle?",
-    x=bquote(x[1]), y=bquote(y[1])
-  )+
-  # plot_theme+
+  ggtitle("Where is the utility maximizing bundle?")+
+  xlab(bquote(x[1]))+ ylab(bquote(y[1]))+ 
+  # labs(
+  #   title = ,
+  #   x=bquote(x[1]), y=bquotey[1])
+  # )+
   theme(
-    # axis.text.x=element_blank(),
     axis.ticks.x=element_blank(),
-    # axis.text.y=element_blank(),
     axis.ticks.y=element_blank(),
     legend.title=element_blank(),
     legend.position="bottom",
-    plot.title = element_text(hjust = 0.5)
+    # --- title position and size --- #
+    plot.title = element_text(hjust = 0.5, size = 10, face = "bold"),
+    # --- size of title and x, y labels --- #
+    axis.text=element_text(size=5),
+    axis.title=element_text(size=8)
     )+
   transition_time(time) +
   ease_aes('linear')
 
 # anim_save(
-#   here("Gitcontrolled/Recitation/rec3/animation/p1_annimate.gif"), 
-#     p1_annimate
+#   here("Data/p1_annimate.gif"), 
+#   p1_annimate
 # )
-
-# opt_p1_u_bc_dt <- p1_u_bc_dt[u_bar==4,]
-
-# plot_opt_p1 <- 
-#   ggplot(data=opt_p1_u_bc_dt)+
-#   geom_line(aes(x=x1, y=y1, group=type, color=type))+
-#   # --- initial endowment --- #
-#   annotate("point", x = 4, y = 0, colour = "red", size=2)+
-#   annotate("text", x = 4.2, y = 0.2, label = expression(omega["1"]))+
-#   theme_bw() +
-#   labs(
-#     title = "Where is the utility maximizing bundle?",
-#     x=bquote(x[1]), y=bquote(y[1])
-#   )+
-#   xlim(0,5)+ ylim(0,5)+
-#   plot_theme
 ```
-
 
 ## Animation: PDF and CDF
 
-```{r}
-
+```{r, eval=FALSE}
 # /*===== Generate data =====*/
 x <-  seq(-4, 4, 0.05)
 y <- pnorm(x)
 y_d <- dnorm(x)
 
-
 plot_data <-data.table(x=x, y=y,y_d=y_d)
-
 
 ls_res <- list()
 ls_cut <- seq(-4,4,by=0.05) 
@@ -195,7 +177,6 @@ for(i in 1:length(ls_cut)){
     plot_data[x <= ls_cut[i], ] %>%
     .[, time := ls_cut[i]]
 }
-
 
 res_all <- 
   rbindlist(ls_res) %>%
@@ -285,9 +266,8 @@ pdf_annimate <-
   labs(title="PDF", x="X", y="Density") +
   theme(plot.title = element_text(hjust = 0.5))
 
-
 #/*--------------------------------*/
-#' ## Combine two animations
+#' ## Animation
 #/*--------------------------------*/
 cdf_gif <- 
   animate(
@@ -301,12 +281,27 @@ pdf_gif <-
     width = 400, height = 420, duration = 15
     )
 
-library(magick)
+# === save === #
+anim_save(
+  here("Data/cdf_gif.gif"), 
+  cdf_gif
+  )
+
+
+anim_save(
+  here("Data/cdf_gif.gif"), 
+  pdf_gif
+  )
+
+
+#/*--------------------------------*/
+#' ## Combine two animations
+#/*--------------------------------*/
 cdf_mgif <- image_read(cdf_gif)
 pdf_mgif <- image_read(pdf_gif)
 
 
-new_gif <- 
+cdf_pdf_gif <- 
   image_append(
     c(cdf_mgif[1], pdf_mgif[1]),
     stack = FALSE
@@ -318,6 +313,123 @@ for(i in 2:100){
       c(cdf_mgif[i], pdf_mgif[i]), 
       stack = FALSE
     )
-  new_gif <- c(new_gif, combined)
+  cdf_pdf_gif <- c(cdf_pdf_gif, combined)
 }
+
+anim_save(
+  here("Data/cdf_pdf.gif"), 
+  cdf_pdf_gif
+)
+```
+
+## Animation: Measurement Errors
+
+```{r}
+N <- 300
+set.seed(1253)
+data_me <-
+  data.table(
+    x = 3 * rnorm(N)
+  ) %>%
+  .[, x_me := x + 3 * rnorm(N)] %>%
+  .[, y := x + 2 * rnorm(N)] %>%
+  .[, .(y, x, x_me)] %>%
+  melt(id.var = "y") %>%
+  .[, time := ifelse(variable == "x", 1, 2)] %>%
+  .[, type := "me"]
+
+base <-
+  data_me[variable=="x",] %>%
+  .[, `:=`(
+    type = "true",
+    time = NULL
+    )]
+
+data_base <-
+  rbindlist(list(base, base), idcol="time") %>%
+  .[, names(data_me), with = FALSE]
+
+data <- rbind(data_base, data_me)
+
+plot_me <-
+  ggplot(data) +
+  geom_point(data=data, aes(y = y, x = value, color=type), size = 0.6) +
+  geom_smooth(data=data, aes(y = y, x = value, color=type), method = "lm") +
+  xlab("x") +
+  transition_time(time) +
+  theme_bw()+
+  xlab("X") + ylab("Y")+
+  scale_colour_discrete(
+    labels = c(
+      "Observations WITH measurement errors in X",
+      "Observations WITHOUT measurement errors in X"
+    )
+  ) + 
+  theme(
+    plot.title = element_text(hjust = 0.5, size=10),
+    legend.position = "bottom", 
+    legend.box = "vertical",
+    legend.margin = margin()
+  )+
+  labs(color = "", shape = "")
+
+# anim_save(
+#   here("Data/plot_me.gif"), 
+#   plot_me
+# )
+```
+
+
+
+# Figure 
+
+## Map MN
+
+```{r, eval=F}
+if (!require("pacman")) install.packages("pacman")
+
+# === For example the boundary of MN=== #
+pacman::p_load("tigris", "sf", "dplyr", "tmap", "leaflet")
+
+# --- Download shapefile for MN --- #
+mn_bd <- 
+  states(cb = FALSE, progress_bar = FALSE) %>%
+  filter(STUSPS=="MN")
+
+# --- Visualization with leaflet --- #
+map_mn_bd <- 
+  tmap_leaflet(
+    tm_shape(mn_bd)+
+    tm_borders(col="blue", lwd=2) +
+    tm_text("NAME", size = 2, col="red")
+  ) %>%
+  addProviderTiles("Esri.WorldImagery")
+  # addProviderTiles("NASAGIBS.ViirsEarthAtNight2012")
+```
+
+## Map HPA
+
+```{r}
+# === Digital map of aquifer boundary for the High Plains aquifer === #
+# Download the data from the website of USGS
+
+# download.file(
+#   url = "https://www.sciencebase.gov/catalog/file/get/6314061bd34e36012efa397b?f=__disk__39%2F00%2Fb6%2F3900b621917a747319cd00a5ecb647623a500dae", 
+#   here("Data/hpa_bd.zip")
+#   )
+
+# unzip(
+#   zipfile = here("Data/hpa_bd.zip"),
+#   exdir = here("Data/hpa_bd")
+#   )
+
+hpa_bd <- 
+  st_read(here("Data/hpa_bd/hp_bound2010.shp"), quiet=TRUE)
+
+map_hpa_bd <- 
+  tmap_leaflet(
+    tm_shape(hpa_bd)+
+    tm_polygons(col="blue", alpha=0.5)
+  ) %>%
+  addTiles(group = "OpenStreeMap.Default")
 ```

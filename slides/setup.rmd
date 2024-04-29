@@ -1,5 +1,4 @@
 ```{r setup-knitr, include = FALSE}
-
 library(knitr)
 options(htmltools.dir.version = FALSE)
 options(knitr.duplicate.label = "allow")
@@ -9,13 +8,13 @@ opts_chunk$set(
   fig.retina = 6,
   fig.dim = c(4, 3.5), 
   out.width = "100%", 
-  warning = F, 
-  message = F,
-  #fig.path='Figs/',
-  cache = F,
-  echo = F, 
-  warning = F, 
-  message = F
+  warning = FALSE, 
+  message = FALSE,
+  #fig.path='images/',
+  cache = FALSE,
+  echo = FALSE,
+  warning = FALSE, 
+  message = FALSE
 )
 
 # opts_knit$set(root.dir = "/Users/tmieno2/Dropbox/ConferencePresentation/Presentation/2021/Kobe_University")
@@ -24,10 +23,17 @@ opts_chunk$set(
 ```{r xaringanExtra, echo=FALSE, cache = F}
 library(xaringanExtra)
 xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons"))
+xaringanExtra::use_animate_css()
 xaringanExtra::use_tile_view()
 xaringanExtra::use_panelset()
 xaringanExtra::use_clipboard()
 xaringanExtra::use_scribble()
+xaringanExtra::use_search(show_icon = TRUE)
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = TRUE
+)
+# xaringanExtra::use_freezeframe()
 # xaringanExtra::use_progress_bar(color = "red", location = "bottom")
 ```
 
@@ -35,7 +41,8 @@ xaringanExtra::use_scribble()
 # library(xaringanthemer)
 # style_duo_accent(
 #   header_h1_font_size = "1.8rem",
-#   header_h2_font_size = "1.4rem",
+#   header_h2_font_size = "1.6rem",
+#   header_h3_font_size = "1.4rem",
 #   code_inline_background_color = "#e6e6e6", 
 #   text_font_size = "1rem",
 #   code_font_size = "1rem",
@@ -56,10 +63,10 @@ suppressMessages(library(parallel))
 suppressMessages(library(tidyverse))
 suppressMessages(library(flipbookr))
 suppressMessages(library(flair))
+suppressMessages(library(fontawesome))
 ```
 
-```{r setup, include=FALSE, cache = FALSE, eval=FALSE}
-
+```{r setup, include=FALSE, cache = FALSE}
 #/*--------------------------------*/
 #' ## # For citation
 #/*--------------------------------*/
@@ -78,8 +85,8 @@ BibOptions(
   longnamesfirst = FALSE
 )
 # bib <- ReadBib("../../GitControlled/Writing/ref.bib")
-bib <- ReadBib("")
-
+bib <- ReadBib("ref.bib")
+# for example,
 # `r Citet(bib, "deschenes2007economic")`
 
 # BibOptions(max.names = 2)
@@ -141,6 +148,19 @@ theme_update(
   panel.background = element_blank(),
   panel.border = element_rect(fill = NA)
 )
+```
+
+```{css css-color}
+<!-- Font color -->
+.blue {
+  color: #887ba3;
+}
+```
+
+```{css table-setup}
+.remark-slide table:not(.table-unshaded) tr:nth-child(even) {
+  background: transparent;
+}
 ```
 
 
@@ -505,7 +525,5 @@ slides > slide {
 .scroll-output {
   height: 90%;
   overflow-y: scroll;
-}
-
- 
+} 
 ```
