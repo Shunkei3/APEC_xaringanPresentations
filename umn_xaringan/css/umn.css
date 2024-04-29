@@ -124,16 +124,16 @@ thead, tfoot, tr:nth-child(even) { background: none; }
 
 /* Add image and change bg color */
 .title-slide {
-  background-image: url(https://shunkei3.github.io/APEC_xaringanPresentations/umn_xaringan/logos/M2out-maroon-gold.png);
+  background-image: url(https://shunkei3.github.io/APEC_xaringanPresentations/umn_xaringan/logos/UMN_M-1line-maroon-blk.png);
   background-position: 10% 15%;
-  background-size: 150px;
+  background-size: 300px;
   background-color: #fff;
   padding-left: 100px;  /* delete this for 4:3 aspect ratio */
 }
 
 /* H1 fonts */
 .title-slide h1 {
-  color: #515151;
+  color: #333333;
   padding-top: 250px;
   font-weight: normal;
   font-size: 45px;
@@ -146,7 +146,7 @@ thead, tfoot, tr:nth-child(even) { background: none; }
 
 /* H2 fonts */
 .title-slide h2 {
-  color: #cc0033;
+  color: #7a0019;
   font-size: 35px;
   text-align: left;
   text-shadow: none;
