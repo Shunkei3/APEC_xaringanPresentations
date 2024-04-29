@@ -124,7 +124,7 @@ thead, tfoot, tr:nth-child(even) { background: none; }
 
 /* Add image and change bg color */
 .title-slide {
-  background-image: url(https://github.com/jvcasillas/ru_xaringan/raw/master/img/logo/ru_new.png);
+  background-image: url(https://shunkei3.github.io/APEC_xaringanPresentations/umn_xaringan/logos/M2out-maroon-gold.png);
   background-position: 10% 15%;
   background-size: 150px;
   background-color: #fff;
