@@ -1,0 +1,23 @@
+---
+title: "Xaringan example"
+subtitle: "UMN template"
+author: "Shunkei Kakimoto"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - css/umn.css
+      - css/umn-fonts.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+
