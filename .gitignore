@@ -1,24 +1,17 @@
+*.Rproj
 .RData
-.DS_Store
 .Rhistory
 .Rprofile
 .Rproj.user
-
-Test_xaringan
-image_archive
-
-*.Rproj
-*.Rproj.user
-.Rhistory
-.RData
-.Rprofile
-.Ruserdata
 .DS_Store
 
-Data/hpa_bd
+Archive
+Data
 
-slides/z_test_*
-slides/note.md
-slides/*_cache/*
-slides/*_files/*
+xaringan/test_*
+xaringan/note.md
+xaringan/*_cache/*
+xaringan/*_files/*
+
+Test_xaringan
 
