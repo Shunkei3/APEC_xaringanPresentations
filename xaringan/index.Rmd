@@ -30,12 +30,6 @@ knit_child("PrepareResults.rmd", quiet = TRUE)
 
 hitting letter "o" key will give you a panel view of the slides
 
-???
-+ Today, I want to talk about how to make a xaringan presentation. 
-
-+ I was a TA for econometrics and micro economics for this year. I have been using xaringan for my recitation presentation. 
-+ Students found these presentations style more helpful, since they are interactive. 
-
 ---
 class: middle
 
@@ -56,14 +50,6 @@ class: middle
 **Source materials for this session:**
 
 + `r Citet(bib, "xie2018r")` ["R markdown: The definitive guide"](https://bookdown.org/yihui/rmarkdown/#ref-xie2015)
-
-???
-+ This is today's outline. First, I'm gonna talk about what is xaringan and why it could be potentially your best friend.
-+ Then, I will some some sample xaringan slides to what they can do. 
-+ Then, I will explain how to make xaringan presentations and talk about the extentions for xaringan,
-
-+ Fianlly, Matt is going talk about Quato presentations. 
-+ Quato presentations are becoming popular in recent years, and I think this maybe the future presentation making. 
 
 
 ---
@@ -95,22 +81,6 @@ knitr::include_graphics("images/xaringan-2-1.png")
 
 <!-- https://media1.tenor.com/m/GeZQuGDMxZEAAAAC/macromatical-rhinoverse.gif -->
 
-???
-+ It's funny that I, a Japanese person, me, is talking about this xaringan package. 
-+ Because the name "xaringan" comes from the famous Japanese anime "Naruto.", which is a anime about ninjas with special power. 
-
-+ Simply put, Sharingan is a two part eye abilities.
-
-+ The eye of insight allows the users to see things that otherwise they would not be able to see, and to also copy and memorize almost anything they see. 
-
-+ The eye of Hypnotism can put their opponent into a trance.
-
-+ I think Xie, who invented xaringan puts it best. 
-
-+ "A Presentation...."
-
-+ So, let's see how it works. 
-
 ---
 background-image: url(https://presentable-user2021.netlify.app/packages/xaringan/featured-hex.png)
 background-size: 100px
@@ -140,17 +110,6 @@ Multiple components are involved to create cool HTML5 slides.
 
 `r fa('lightbulb',height='20px',fill='steelblue')` See [this blog](https://yihui.org/en/2017/08/why-xaringan-remark-js/) for more about *xaringan/ remark.js*. 
 
-???
-+ remark.js is a tools to create slides that can be used in browser. 
-
-+ https://www.verouden.net/slides/presentation-xaringan/#10
-  + Basically xaringan injected the chakra of R Markdown (minus Pandoc) into remark.js. The slides are rendered by remark.js in the web browser, and the Markdown source needed by remark.js is generated from R Markdown (knitr).
-
-
-+ I'm a little unsure about how the basic mechanism works but xaringan takes remark.js (which is a combination of javascript and markdown) and connects it with basic HTML slides that we can then use to present data and other information created through R in an interactive way.
-
-
-
 ---
 class: middle
 
@@ -174,14 +133,6 @@ knitr::knit_child("PrepareResults.rmd", quiet = TRUE)
 ```
 ````
 
-???
-
-+ Xaringan is helpful because we can do all of our work within R from doing data analysis to creating presentations. As opposed to using another tool like Powerpoint or Latex for presentations.
-
-+ I personally prefer to do all of my work with the same tool because it helps my workflow. With the help of xaringan I can take any figures or tables I created in R and easily incorporate them into my presentations.
-
-+ At the bottom of the slide, you can see my workflow. I usually put all of my figures and tables into a single R Markdown file so I can pull from this single source for all of my papers and presentations
-
 ---
 class: middle
 
@@ -198,11 +149,6 @@ In terms of its functionality,
 `r fontawesome::fa('lightbulb',height='20px',fill='steelblue')` xaringan slides allow interactive presentations, which potentially make your presentation more intriguing and fun!
 
 
-???
-+ Well there are lots of options to make presentation slides. I think the most common ways is to 
-
-+ We mostly create figures and tables with some 
-
 ---
 class: center, middle
 name: falvor
@@ -211,9 +157,6 @@ name: falvor
 
 <div style='float:left'></div><hr color='#ffcc33' size=2px width=800>
 
-???
-+ Well there are tons of useful functionalities in xaringan package. 
-+ Here, I would like to introduce some of the various flavors of xaringan presentations through the slides I used for my recitation sessions.
 
 ---
 class: middle
@@ -244,8 +187,6 @@ class: middle
 
 *italic text*
 
-???
-+ I think you already familiar with these operations. For example, one sharp is the largest header and so on. 
 
 ---
 class: middle
@@ -288,8 +229,6 @@ this text is shown in the right column
 .content-box-yellow[text in yellow box ...]
 ]
 
-???
-+ You can create columns. 
 
 ---
 class: middle
@@ -340,120 +279,26 @@ class: middle
   & y_1 + y_2 = 16
 \end{aligned}
 
-
-???
-+ You can even write complicated equations. 
-+ Though I know there are some limitations for math expressions in Xiaringan, so far I have never run into any trouble.
-
 ---
-class: middle
+class: middle 
 
 ## Figures
 .content-box-yellow[Examples: Jensen's inequality]
 .panelset[ 
 .panel[.panel-name[Example 1 : g(x) is convex]
-.left5[
-Suppose that $g(x)=x^2$.
-.small-code[
-```{r, echo=T}
-set.seed(356)
-# Create a sequence of X from a uniformal distribution
-x <- seq(0, 10, by=0.01)
-
-# /*===== Convex case: g(X)=X^2 =====*/
-y <- x^2
-
-fig_convex <-
-  ggplot() +
-  geom_point(aes(x = x, y = y), size=0.5) +
-  # --- Add E[X] --- #
-  geom_vline(
-    xintercept = mean(x), color = "red", linetype = "dashed"
-    ) +
-  annotate(
-    "text", x = mean(x)+1, y = 0.01,
-    label = paste0("E[X]=", round(mean(x), 1)), size = 3, color = "red"
-    ) +
-  # --- Add horizontal line for E[g(X)]--- #
-  geom_hline(
-    yintercept = mean(y), color="blue", linetype = "dashed"
-    ) +
-  annotate(
-    "text", x = 1, y = mean(y)+5,
-    label = paste0("E[g(X)]=", round(mean(y), 1)), size = 3, color = "blue"
-    ) +
-  # --- Add horizontal line for g(E[X]) --- #
-  geom_hline(
-    yintercept = mean(x)^2, color="darkgreen", linetype = "dashed"
-    ) +
-  annotate(
-    "text", x = 1, y = mean(x)^2-5,
-    label = paste0("g(E(X))=", round(mean(x)^2, 1)), size = 3, color = "darkgreen"
-    ) +
-  theme_bw()
+```{r, fig.dim = c(4, 6), out.width = "50%"}
+knitr::include_graphics("images/convex.png")
 ```
-  ]
-  ]
-.right5[
-```{r, echo=F, out.width = "80%"}
-fig_convex
-```
-
 $$\color{darkgreen}{g(E[X])} \leq \color{blue}{E[g(X)]}$$
   ]
-]
 
 .panel[.panel-name[Example 2: g(x) is concave]
-.left5[
-
-Suppose that $g(x)=\sqrt{x}$.
-
-.small-code[
-```{r, echo=T, out.width = "50%"}
-# /*===== Convex case: g(X)=X^(1/2) =====*/
-y <- x^(1/2)
-
-figure_ex2 <-
-  ggplot()+
-  geom_point(aes(x = x, y = y), size=0.5) +
-  # --- Add E[X] --- #
-  geom_vline(
-      xintercept = mean(x), color = "red", linetype = "dashed"
-    ) +
-  annotate(
-    "text", x = mean(x)+0.8, y = 0.01,
-    label = paste0("E[X]=", round(mean(x), 1)), size = 3, color = "red") +
-  # --- Add E[g(X)] --- #
-  geom_hline(
-    yintercept = mean(y), color = "blue", linetype = "dashed"
-    ) +
-  annotate(
-    "text", x = 1, y = mean(y)-0.2,
-    label = paste0("E[g(X)]=", round(mean(y), 2)), size = 3, color = "blue"
-    ) +
-  # --- Add g(E[X]) --- #
-  geom_hline(
-    yintercept = mean(x)^(1/2), color = "darkgreen", linetype = "dashed"
-    ) +
-  annotate(
-    "text", x = 1, y = mean(x)^(1/2)+0.2,
-    label = paste0("g(E(X))=", round(mean(x)^(1/2), 2)), size = 3, color = "darkgreen"
-    ) +
-  theme_bw()
-```
-  ]
-  ]
-.right5[
-```{r, echo=F, eval=T, out.width = "80%"}
-figure_ex2
+```{r, fig.dim = c(4, 6), out.width = "50%"}
+knitr::include_graphics("images/concave.png")
 ```
 $$\color{blue}{E[g(X)]} \leq \color{darkgreen}{g(E[X])}$$
   ]
 ]
-]
-
-???
-+ These are some examples showing how the figures look with code I used to create them on the left.  
 
 ---
 class: middle
@@ -463,8 +308,7 @@ class: middle
 ```{r, fig.dim = c(4, 7)}
 map_hpa_bd
 ```
-???
-+ You can also insert interactive leaflet maps. By the way, do you know what this is a map of?
+
 ---
 class: middle
 
@@ -520,8 +364,6 @@ modelsummary(
   ]
   ]
 ]
-???
-+ This is how regression result tables can be shown. Here I am using model summary and GT packages. They work well with xaringan and HTML.
 
 ---
 class: middle
@@ -542,9 +384,6 @@ cdf_pdf_gif
 \end{align*}
 ]
 
-???
-+ One of the strengths of using HTML based presentations is that we can embed animations into the slides. This animation is showing the relationship between PDF and CDF, normally we learn PDF and CDF with equations but if we show these relationships using animation I think students can more clearly understand the concept.
-
 ---
 class: middle
 
@@ -555,8 +394,7 @@ class: middle
 ```{r, cache=FALSE, fig.dim = c(8, 5), out.width = "80%"}
 animate(plot_me, fps = 20, duration=10, stard_pause = 10)
 ```
-???
-+ This is another example of animation that shows why measurement error causes attenuation bias in linear regression.
+
 ---
 class: middle
 
@@ -586,6 +424,7 @@ Then, use `Citet` or `Citep` to cite a source.
 The xaringan package `r Citep(bib, "xie2022")` is an R Markdown extension.
 ```
 The xaringan package `r Citep(bib, "xie2022")` is an R Markdown extension.
+
 ???
 + You can use bib file to create citations
 
@@ -642,8 +481,7 @@ renderthis::to_pdf(
   )
 ```
 ]
-???
-+ Finally, you can easily convert your HTML slides to a PDF using a renderthis package.
+
 ---
 class: middle, center
 
@@ -830,7 +668,7 @@ remotes::install_github("gadenbuie/xaringanthemer")
 ]
 
 
-For example, using `style_duo_accent()` like
+For example, using `style_duo_accent()`, 
 .medium-code[
 ```{r, echo=TRUE, eval=F}
 style_duo_accent_inverse(
@@ -845,8 +683,6 @@ you can make slides looks like this
 knitr::include_graphics("https://raw.githubusercontent.com/gadenbuie/xaringanthemer/assets/example_duo_accent_inverse.png")
 ```
 
-???
-+ Fortunatley, instead of creating a CSS file from scratch the xaringanthemer can do this task for us.
 
 ---
 background-image: url(https://presentable-user2021.netlify.app/packages/xaringanextra/featured-hex.png)
@@ -868,8 +704,8 @@ remotes::install_github("gadenbuie/xaringanExtra")
 <br>
 
 Let's see some of the functions in the next slide!
-???
-+ There is another package extension for xaringan called xaringanExtra. It offers extensional functionalities.
+
+
 ---
 class: middle, animated, slideInRight, bounceOutDown
 
@@ -936,13 +772,6 @@ embed_xaringan(
   url = "https://tmieno2.github.io/R-as-GIS-workshop/vector_basics.html#/title-slide"
 )
 ```
-
-
-???
-+ Quarto revealjs slides
-+ remark.js is not actively developped anymore...
-+ Meanwhile, 
-+ Seems like there are lots of templates for Quarto Revealjs slides.
 
 ---
 class: center, middle
