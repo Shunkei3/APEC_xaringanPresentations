@@ -371,11 +371,9 @@ class: middle
 ## Animation with `gganimate`
 
 .content-box-yellow[Example 1: PDF and CDF]
-
-```{r, dpi=36, cache=FALSE, out.width = "80%"}
-cdf_pdf_gif <- image_read("images/cdf_pdf.gif")
-cdf_pdf_gif
-```
+.center[
+<img src="https://shunkei3.github.io/APEC_xaringanPresentations/xaringan/images/cdf_pdf.gif" width="600" height="350"/>
+]
 
 .medium[
 \begin{align*}
