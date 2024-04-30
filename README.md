@@ -16,7 +16,7 @@
 
 + See `umn_style_xaringan_template` folder.
 
-The image of the template:
+The images of the template:
 
 ![Title slide](https://shunkei3.github.io/APEC_xaringanPresentations/xaringan/images/view-slides.png)
 

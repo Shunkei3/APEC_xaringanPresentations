@@ -120,7 +120,7 @@ thead, tfoot, tr:nth-child(even) { background: none; }
 
 /* Add image and change bg color */
 .title-slide {
-  background-image: url(https://shunkei3.github.io/APEC_xaringanPresentations/umn_xaringan/logos/UMN_M-1line-maroon-blk.png);
+  background-image: url(https://shunkei3.github.io/APEC_xaringanPresentations/umn_style_xaringan_template/logos/UMN_M-1line-maroon-blk.png);
   background-position: 90% 95%;
   background-size: 300px;
   background-color: #fff;
