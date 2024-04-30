@@ -1,0 +1,236 @@
+---
+title: 'Quarto with Reveal.js'
+subtitle: 'Brief Introduction'
+format: 
+  clean-revealjs:
+    embed-resources: true
+    incremental: true
+    html-math-method: katex
+    scrollable: true
+    code-overflow: wrap
+    title-slide-attributes: 
+      data-background-image: 'images/UMN9_M-1line-blk.png'
+      data-background-size: 25%
+      data-background-position: 4% 97%
+  beamer: default
+  pptx: default
+author:
+  - name: Matt Braaksma
+    email: braak014@umn.edu
+    affiliations: University of Minnesota
+date: April 30, 2024
+filters:
+  - roughnotation
+---
+
+
+## What is Quarto?
+
+![](images/Screenshot 2024-04-29 at 2.45.52 PM.png)
+
+## Quarto vs xaringan
+
+- What is the difference? 
+  - Quarto uses reveal.js to generate html slides 
+  - xaringan uses remark.js to generate html slides
+
+- Quarto has *most* of the features of xaringan, but more flexibility and more current development
+  - Integration with VS Code (visual editor, preview, etc.)
+  - Output options include html, beamer (LaTeX/PDF), pptx
+
+
+
+## Slide Formatting
+
+```{.markdown}
+---
+title: "Habits"
+author: "John Doe"
+format: revealjs
+---
+
+# In the morning
+
+## Getting up
+
+- Turn off alarm
+- Get out of bed
+
+## Breakfast
+
+- Eat eggs
+- Drink coffee
+
+# In the evening
+
+## Dinner
+
+- Eat spaghetti
+- Drink wine
+
+## Going to sleep
+
+- Get in bed
+- Count sheep
+```
+
+## Header for these Slides
+
+```{.markdown}
+---
+title: 'Quarto with Reveal.js'
+subtitle: 'Brief Introduction'
+format: 
+  clean-revealjs:
+    embed-resources: true
+    incremental: true
+    html-math-method: katex
+    scrollable: true
+    code-overflow: wrap
+    title-slide-attributes: 
+      data-background-image: UMN9_M-1line-blk.png
+      data-background-size: 25%
+      data-background-position: 4% 97%
+  beamer: default
+  pptx: default
+author:
+  - name: Matt Braaksma
+    email: braak014@umn.edu
+    affiliations: University of Minnesota
+date: April 30, 2024
+---
+```
+
+## Executable Code
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, results = FALSE) 
+```
+
+```{r}
+#| echo: true
+# Import data with R
+library(tigris)
+library(ggplot2)
+mn_counties <- counties("MN")
+mn_roads <- primary_secondary_roads("MN")
+```
+
+. . .
+
+```{python}
+#| jupyter: python3
+#| echo: true
+# Import data with Python
+import pygris
+
+counties = pygris.counties(state = "MN", cb = True, cache = True)
+roads = pygris.primary_secondary_roads(state = "MN", cache = True)
+```
+
+
+## Figures
+
+::: {.panel-tabset}
+
+### Counties
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| echo: true
+ggplot(mn_counties) + 
+  geom_sf() + 
+  theme_void()
+```
+
+### Roads
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| echo: true
+ggplot(mn_roads) + 
+  geom_sf() + 
+  theme_void()
+```
+
+:::
+
+## Python Code
+
+::: {.panel-tabset}
+
+### Counties
+
+```{python}
+#| jupyter: python3
+#| code-fold: true
+#| warning: false
+#| echo: true
+counties.explore()
+```
+
+### Roads
+
+```{python}
+#| jupyter: python3
+#| code-fold: true
+#| warning: false
+#| echo: true
+roads.explore()
+```
+
+:::
+
+
+## Write Equations with LaTeX
+
+The Wald estimator:
+
+. . .
+
+$$
+\hat{\delta}_{IV,wald} \equiv \frac{E_N [y_i | z_i =1] - E_N [y_i | z_i =0]}{E_N [d_i | z_i =1] - E_N [d_i | z_i =0]}
+$$
+
+
+## Extensions: `roughnotation`
+
+Use the `.rn` to class to specify what elements should be highlighted.
+
+. . . 
+
+[Underline]{.rn rn-type=underline rn-color=red}
+
+[Box]{.rn rn-type=box rn-color=purple}
+
+[Circle]{.rn rn-type=circle rn-color=blue}
+
+[Highlight]{.rn rn-type=highlight}
+
+[Strike-Through]{.rn rn-type=strike-through rn-color=green}
+
+[Crossed-off]{.rn rn-type=crossed-off rn-color=orange}
+
+
+
+## Render to other formats
+
+```{bash}
+#| echo: true 
+#| eval: false
+quarto render apec_seminar_quarto.qmd --to beamer
+quarto render apec_seminar_quarto.qmd --to pptx
+```
+
+## Resources for Learning More
+
+- Quarto
+  - [Get Started with Quarto](https://quarto.org/docs/get-started/)
+  - [Revealjs Guide](https://quarto.org/docs/presentations/revealjs/)
+  - [Revealjs Extensions](https://quarto.org/docs/extensions/listing-revealjs.html)
+
+- Quarto and xaringan
+  - [*With Quarto Coming, is R Markdown Going Away? No.* - Yihui Xie](https://yihui.org/en/2022/04/quarto-r-markdown/)
+  - [*How to transition from xaringan to Quarto revealjs* - Emi Tanaka](https://emitanaka.org/blog/2022-07-11-transitioning-from-xaringan-to-quarto-revealjs/transitioning-from-xaringan-to-quarto-revealjs.html)
