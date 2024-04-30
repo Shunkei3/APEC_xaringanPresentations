@@ -389,9 +389,9 @@ class: middle
 
 .content-box-yellow[Example 2: Measurement error bias in linear regression]
 
-```{r, cache=FALSE, fig.dim = c(8, 5), out.width = "80%"}
-animate(plot_me, fps = 20, duration=10, stard_pause = 10)
-```
+.center[
+<img src="https://shunkei3.github.io/APEC_xaringanPresentations/xaringan/images/plot_me.gif" width="700" height="450"/>
+]
 
 ---
 class: middle
