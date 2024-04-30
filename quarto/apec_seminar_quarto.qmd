@@ -9,7 +9,7 @@ format:
     scrollable: true
     code-overflow: wrap
     title-slide-attributes: 
-      data-background-image: UMN9_M-1line-blk.png
+      data-background-image: 'images/UMN9_M-1line-blk.png'
       data-background-size: 25%
       data-background-position: 4% 97%
   beamer: default
