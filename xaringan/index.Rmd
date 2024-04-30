@@ -1,0 +1,990 @@
+---
+title: "Introduction to Making <br> Presentation Slides with xaringan"
+subtitle: "APEC Skill Seminar"
+author: "Shunkei Kakimoto"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - css/umn-style.css
+      - css/umn-style-fonts.css
+      - css/my-style.css
+    nature:
+      highlightStyle: github
+      highlightLines: false
+      highlightLanguage: ["r"]
+      countIncrementalSlides: false
+      ratio: "15:11"
+---
+class: middle
+
+```{r, child = 'setup.rmd', cache = FALSE}
+```
+
+```{r, include = F, cache = F}
+knit_child("PrepareResults.rmd", quiet = TRUE)
+```
+
+.content-box-yellow[**A Useful tip:**]
+
+hitting letter "o" key will give you a panel view of the slides
+
+???
++ Today, I want to talk about how to make a xaringan presentation. 
+
++ I was a TA for econometrics and micro economics for this year. I have been using xaringan for my recitation presentation. 
++ Students found these presentations style more helpful, since they are interactive. 
+
+---
+class: middle
+
+## Today's Outline
+
+1.[Introduction: What is xaringan and why it could be your best friend?](#intro)
+
+2.[Examples of xaringan slides](#falvor) 
+
+3.[How to make presentation slides with xaringan?](#how)
+
+4.[Extensions for xaringan presentations](#extension)
+
+5.[Introduction to quarto revealjs slides by Matt](#quarto)
+
+<br>
+
+**Source materials for this session:**
+
++ `r Citet(bib, "xie2018r")` ["R markdown: The definitive guide"](https://bookdown.org/yihui/rmarkdown/#ref-xie2015)
+
+???
++ This is today's outline. First, I'm gonna talk about what is xaringan and why it could be potentially your best friend.
++ Then, I will some some sample xaringan slides to what they can do. 
++ Then, I will explain how to make xaringan presentations and talk about the extentions for xaringan,
+
++ Fianlly, Matt is going talk about Quato presentations. 
++ Quato presentations are becoming popular in recent years, and I think this maybe the future presentation making. 
+
+
+---
+class:center, middle
+name: intro
+
+# Introduction: What is xaringan?
+
+<div style='float:left'></div><hr color='#ffcc33' size=2px width=800>
+
+---
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
+background-size: 90px
+background-position: 90% 5%
+
+class: middle
+
+## Sharingan (写輪眼)
+.center[
+.blockquote[
+```{r, fig.dim = c(4, 7), out.width = "75%"}
+knitr::include_graphics("images/xaringan-2-1.png")
+```
+.right[-- <cite>[`r Citet(bib, "xie2021")`, Slide#41](https://slides.yihui.org/xaringan/#41)</cite>]
+]
+]
+.pull-right[<img src="https://media1.tenor.com/m/jANWn2UhNeAAAAAC/itachi-sharingan.gif" width="350" height="250"/>]
+
+
+<!-- https://media1.tenor.com/m/GeZQuGDMxZEAAAAC/macromatical-rhinoverse.gif -->
+
+???
++ It's funny that I, a Japanese person, me, is talking about this xaringan package. 
++ Because the name "xaringan" comes from the famous Japanese anime "Naruto.", which is a anime about ninjas with special power. 
+
++ Simply put, Sharingan is a two part eye abilities.
+
++ The eye of insight allows the users to see things that otherwise they would not be able to see, and to also copy and memorize almost anything they see. 
+
++ The eye of Hypnotism can put their opponent into a trance.
+
++ I think Xie, who invented xaringan puts it best. 
+
++ "A Presentation...."
+
++ So, let's see how it works. 
+
+---
+background-image: url(https://presentable-user2021.netlify.app/packages/xaringan/featured-hex.png)
+background-size: 100px
+background-position: 90% 8%
+
+class: middle
+
+## What does xaringan do?
+
+.blockquote[
+The xaringan package is an R Markdown extension based on the JavaScript library remark.js to generate HTML5 presentations. 
+]
+
+<br>
+
+Multiple components are involved to create cool HTML5 slides. 
+
+--
+
+1.&nbsp; remark.js (JavaScript `r fa("js", height='25px', fill = "black")` + Markdown `r fa("markdown", height='25px', fill = "black")`)
+
+--
+
+2.&nbsp;<b>xaringan</b> connects remark.js to R markdown. 
+
+--
+
+`r fa('lightbulb',height='20px',fill='steelblue')` See [this blog](https://yihui.org/en/2017/08/why-xaringan-remark-js/) for more about *xaringan/ remark.js*. 
+
+???
++ remark.js is a tools to create slides that can be used in browser. 
+
++ https://www.verouden.net/slides/presentation-xaringan/#10
+  + Basically xaringan injected the chakra of R Markdown (minus Pandoc) into remark.js. The slides are rendered by remark.js in the web browser, and the Markdown source needed by remark.js is generated from R Markdown (knitr).
+
+
++ I'm a little unsure about how the basic mechanism works but xaringan takes remark.js (which is a combination of javascript and markdown) and connects it with basic HTML slides that we can then use to present data and other information created through R in an interactive way.
+
+
+
+---
+class: middle
+
+## Why xaringan might be your new presentation tool?
+
+I like xaringan presentations mainly because...
+
+`r fa('lightbulb',height='20px',fill='steelblue')` You can write everything in R Markdown.
+
+--
+
+`r fa('lightbulb',height='20px',fill='steelblue')` You can easily incorporate figures and tables created with `r fa("r-project", fill = "steelblue")`: 
+ 
+  + `r fa('comments',height='20px',fill='steelblue')` You can work on figures and tables within the xaringan .Rmd file.
+
+  + `r fa('comments',height='20px',fill='steelblue')` or, if you have .Rmd file that contain all figures and tables you used in writing your paper, you can directly call those objects by loading the file in the xaringan .Rmd file. 
+
+````markdown
+`r ''````{r, include = FALSE}
+knitr::knit_child("PrepareResults.rmd", quiet = TRUE)
+```
+````
+
+???
+
++ Xaringan is helpful because we can do all of our work within R from doing data analysis to creating presentations. As opposed to using another tool like Powerpoint or Latex for presentations.
+
++ I personally prefer to do all of my work with the same tool because it helps my workflow. With the help of xaringan I can take any figures or tables I created in R and easily incorporate them into my presentations.
+
++ At the bottom of the slide, you can see my workflow. I usually put all of my figures and tables into a single R Markdown file so I can pull from this single source for all of my papers and presentations
+
+---
+class: middle
+
+### Furthermore...
+
+In terms of its functionality, 
+
+`r fontawesome::fa('lightbulb',height='20px',fill='steelblue')` There are many awesome functionalities in xaringan! For example, `code highlighter` and `clipboard`. For lab session involving coding, these functions are helpful for both instructors and students. 
+
+--
+
+<br>
+
+`r fontawesome::fa('lightbulb',height='20px',fill='steelblue')` xaringan slides allow interactive presentations, which potentially make your presentation more intriguing and fun!
+
+
+???
++ Well there are lots of options to make presentation slides. I think the most common ways is to 
+
++ We mostly create figures and tables with some 
+
+---
+class: center, middle
+name: falvor
+
+# Examples of xaringan Presentations
+
+<div style='float:left'></div><hr color='#ffcc33' size=2px width=800>
+
+???
++ Well there are tons of useful functionalities in xaringan package. 
++ Here, I would like to introduce some of the various flavors of xaringan presentations through the slides I used for my recitation sessions.
+
+---
+class: middle
+
+.medium[
+```{r, echo=TRUE, eval=FALSE}
+# Header 1
+## Header 2
+### Header 3
+
++ Item 1
+  + Item 2
+
+**emphasized text**
+
+*italic text*
+```
+]
+
+# Header 1
+## Header 2
+### Header 3
+
++ list 1
+  + list 2
+
+**emphasized text**
+
+*italic text*
+
+???
++ I think you already familiar with these operations. For example, one sharp is the largest header and so on. 
+
+---
+class: middle
+
+## Columns and Content color boxes
+
+.medium[
+````markdown
+.pull-left[ 
+this text is shown in the left column
+
+.content-box-blue[text in blue box ...]
+
+.content-box-red[text in red box ...]
+]
+
+.pull-right[ 
+this text is shown in the right column
+
+.content-box-yellow[text in green box ...]
+
+.content-box-yellow[text in yellow box ...]
+]
+````
+]
+
+.pull-left[ 
+this text is shown in the left column
+
+.content-box-blue[text in blue box ...]
+
+.content-box-red[text in red box ...]
+]
+
+.pull-right[ 
+this text is shown in the right column
+
+.content-box-green[text in green box ...]
+
+.content-box-yellow[text in yellow box ...]
+]
+
+???
++ You can create columns. 
+
+---
+class: middle
+
+# Math
+
+LaTeX commands works fine (most of the time). 
+
+For example, 
+
+<br>
+
+.content-box-yellow[Example 1: Inline equations]
+````markdown
+$\omega_1=(6,10)$ and $\omega_2=(6,0)$
+````
+
+$\omega_1=(6,10)$ and $\omega_2=(6,0)$
+
+<br>
+
+.content-box-yellow[Example 2: Equations]
+````markdown
+$$U_j(x_j, y) = x_j + \theta_j ln \, y$$
+````
+
+$$U_j(x_j, y) = x_j + \theta_j ln \, y$$
+
+---
+class: middle
+
+# Math 
+
+.content-box-yellow[Example 3: Equations]
+````markdown
+\begin{aligned}
+\max_{x_1,y_1} \quad & U_1(x_1, y_1)=x_1y_1 \\
+\textrm{s.t.} \quad & max[x_2, y_2] = \overline{u_2} \\
+  & x_1 + x_2 = 16 \\
+  & y_1 + y_2 = 16
+\end{aligned}
+````
+
+\begin{aligned}
+\max_{x_1,y_1} \quad & U_1(x_1, y_1)=x_1y_1 \\
+\textrm{s.t.} \quad & max[x_2, y_2] = \overline{u_2} \\
+  & x_1 + x_2 = 16 \\
+  & y_1 + y_2 = 16
+\end{aligned}
+
+
+???
++ You can even write complicated equations. 
++ Though I know there are some limitations for math expressions in Xiaringan, so far I have never run into any trouble.
+
+---
+class: middle
+
+## Figures
+
+.content-box-yellow[Examples: Jensen's inequality]
+
+.panelset[ 
+
+.panel[.panel-name[Example 1 : g(x) is convex]
+.left5[
+
+Suppose that $g(x)=x^2$.
+
+.small-code[
+```{r, echo=T}
+set.seed(356)
+
+# Create a sequence of X from a uniformal distribution
+x <- seq(0, 10, by=0.01)
+
+# /*===== Convex case: g(X)=X^2 =====*/
+y <- x^2
+
+fig_convex <-
+  ggplot() +
+  geom_point(aes(x = x, y = y), size=0.5) +
+  # --- Add E[X] --- #
+  geom_vline(
+    xintercept = mean(x), color = "red", linetype = "dashed"
+    ) +
+  annotate(
+    "text", x = mean(x)+1, y = 0.01,
+    label = paste0("E[X]=", round(mean(x), 1)), size = 3, color = "red"
+    ) +
+  # --- Add horizontal line for E[g(X)]--- #
+  geom_hline(
+    yintercept = mean(y), color="blue", linetype = "dashed"
+    ) +
+  annotate(
+    "text", x = 1, y = mean(y)+5,
+    label = paste0("E[g(X)]=", round(mean(y), 1)), size = 3, color = "blue"
+    ) +
+  # --- Add horizontal line for g(E[X]) --- #
+  geom_hline(
+    yintercept = mean(x)^2, color="darkgreen", linetype = "dashed"
+    ) +
+  annotate(
+    "text", x = 1, y = mean(x)^2-5,
+    label = paste0("g(E(X))=", round(mean(x)^2, 1)), size = 3, color = "darkgreen"
+    ) +
+  theme_bw()
+```
+  ]
+  ]
+.right5[
+```{r, echo=F, out.width = "100%"}
+fig_convex
+```
+
+$$\color{darkgreen}{g(E[X])} \leq \color{blue}{E[g(X)]}$$
+  ]
+]
+
+.panel[.panel-name[Example 2: g(x) is concave]
+.left5[
+
+Suppose that $g(x)=\sqrt{x}$.
+
+.small-code[
+```{r, echo=T, out.width = "50%"}
+# /*===== Convex case: g(X)=X^(1/2) =====*/
+y <- x^(1/2)
+
+figure_ex2 <-
+  ggplot()+
+  geom_point(aes(x = x, y = y), size=0.5) +
+  # --- Add E[X] --- #
+  geom_vline(
+      xintercept = mean(x), color = "red", linetype = "dashed"
+    ) +
+  annotate(
+    "text", x = mean(x)+0.8, y = 0.01,
+    label = paste0("E[X]=", round(mean(x), 1)), size = 3, color = "red") +
+  # --- Add E[g(X)] --- #
+  geom_hline(
+    yintercept = mean(y), color = "blue", linetype = "dashed"
+    ) +
+  annotate(
+    "text", x = 1, y = mean(y)-0.2,
+    label = paste0("E[g(X)]=", round(mean(y), 2)), size = 3, color = "blue"
+    ) +
+  # --- Add g(E[X]) --- #
+  geom_hline(
+    yintercept = mean(x)^(1/2), color = "darkgreen", linetype = "dashed"
+    ) +
+  annotate(
+    "text", x = 1, y = mean(x)^(1/2)+0.2,
+    label = paste0("g(E(X))=", round(mean(x)^(1/2), 2)), size = 3, color = "darkgreen"
+    ) +
+  theme_bw()
+```
+  ]
+  ]
+.right5[
+```{r, echo=F, eval=T, out.width = "100%"}
+figure_ex2
+```
+$$\color{blue}{E[g(X)]} \leq \color{darkgreen}{g(E[X])}$$
+  ]
+]
+]
+
+???
++ These are some examples showing how the figures look with code I used to create them on the left.  
+
+---
+class: middle
+
+## Line highlighting
+
+An example of using the trailing comment `#<<` to highlight lines:
+
+
+.pull-left[
+### Code
+
+````markdown
+`r ''````{r}
+library(ggplot2)
+ggplot(mtcars) + 
+  aes(mpg, disp) + 
+  geom_point() +   #<<
+  geom_smooth()    #<<
+```
+````
+]
+
+.pull-right[
+### Output
+
+```{r, eval=FALSE, echo=TRUE}
+library(ggplot2)
+ggplot(mtcars) + 
+  aes(mpg, disp) + 
+  geom_point() +   #<<
+  geom_smooth()    #<<
+```
+]
+
+???
+
++  These symbols allow you to easily use Xaringan's highlighting function. If you want to explain code line by line then this might be helpful because students can clearly know what part of the code you are talking about. 
+---
+class: middle
+
+## Figure: Create maps with `leaflet`
+
+```{r, fig.dim = c(4, 7)}
+map_hpa_bd
+```
+???
++ You can also insert interactive leaflet maps. By the way, do you know what this is a map of?
+---
+class: middle
+
+## Tables
+For example, regression results can be shown like this. 
+.panelset[ 
+<!-- Panel 1 -->
+.panel[.panel-name[Code]
+.medium-code[
+```{r, echo=TRUE}
+library(modelsummary)
+library(gt)
+
+# === Load Data === #
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+dat <- read.csv(url)
+
+# === Run regressions === #
+models <- list(
+  "OLS 1" = lm(Donations ~ Literacy + Clergy, data = dat),
+  "OLS 2" = lm(Crime_pers ~ Literacy + Clergy, data = dat),
+  "OLS 3" = lm(Crime_prop ~ Literacy + Clergy, data = dat)
+  )
+```
+```{r, echo=TRUE, eval=FALSE}
+# === Report results with modelsummary === #
+modelsummary(
+  models, 
+  fmt = "%.2f",
+  gof_map = c("nobs", "r.squared"),
+  stars = TRUE,
+  notes = list("You can leave a note here"),
+  output = "gt"
+  ) %>%
+  tab_options(table.font.names = "Times New Roman")
+```
+  ]
+  ]
+<!-- Panel 2 -->
+.panel[.panel-name[Regression result]
+.medium-code[
+```{r}
+modelsummary(
+  models, 
+  fmt = "%.2f",
+  gof_map = c("nobs", "r.squared"),
+  stars = TRUE,
+  notes = list("You can leave a note here"),
+  output = "gt"
+  ) %>%
+  tab_options(table.font.names = "Times New Roman")
+```
+  ]
+  ]
+]
+???
++ This is how regression result tables can be shown. Here I am using model summary and GT packages. They work well with xaringan and HTML.
+
+---
+class: middle
+
+## Animation with `gganimate`
+
+.content-box-yellow[Example 1: PDF and CDF]
+
+```{r, dpi=36, cache=FALSE, out.width = "80%"}
+cdf_pdf_gif <- image_read("images/cdf_pdf.gif")
+cdf_pdf_gif
+```
+
+.medium[
+\begin{align*}
+\color{blue}{CDF}:& \, F(x) = Pr(X \leq x) = \int_{-\infty}^x f(t) dt \\
+\color{blue}{PDF}:& \, f(x) = \frac{d}{dx}F(x) \quad \text{by definition of PDF}
+\end{align*}
+]
+
+???
++ One of the strengths of using HTML based presentations is that we can embed animations into the slides. This animation is showing the relationship between PDF and CDF, normally we learn PDF and CDF with equations but if we show these relationships using animation I think students can more clearly understand the concept.
+
+---
+
+class: middle
+
+## Animation with `gganimate`
+
+.content-box-yellow[Example 2: Measurement error bias in linear regression]
+
+```{r, cache=FALSE, fig.dim = c(8, 5)}
+animate(plot_me, fps = 20, duration=10, stard_pause = 10)
+```
+???
++ This is another example of animation that shows why measurement error causes attenuation bias in linear regression.
+---
+class: middle
+
+## Citations and references
+
+You can cite any source from your .bib file via [RefManageR](https://docs.ropensci.org/RefManageR/reference/Cite.html) package. You need to setup the `BibOptions` at the beginning of your slides like [this](https://github.com/yihui/xaringan/wiki/Bibliography-and-citations).
+
+--
+
+<br>
+
+Then, use `Citet` or `Citep` to cite a source.
+
+.content-box-green[Example: `Citet`]
+
+```{r, echo=TRUE, eval=FALSE}
+# For inline text citation
+`r Citet(bib, "xie2022")` created xaringan. 
+```
+`r Citet(bib, "xie2022")` created xaringan. 
+
+
+.content-box-green[Example: `Citep`]
+
+```{r, echo=TRUE, eval=FALSE}
+# For inline parenthetical citation
+The xaringan package `r Citep(bib, "xie2022")` is an R Markdown extension.
+```
+The xaringan package `r Citep(bib, "xie2022")` is an R Markdown extension.
+???
++ You can use bib file to create citations
+
+---
+class: middle
+
+Then, put the following code in a r chunk in the final slides to show all the sources you cited. 
+
+<br>
+
+````markdown
+`r ''````{r, results='asis', echo=FALSE}
+PrintBibliography(bib)
+```
+````
+
+`r fa('exclamation',height='20px',fill='steelblue')` Don't forget to put `results='asis', echo=FALSE` options in a chunk. 
+---
+class: middle
+
+## Useful Shortcut Keys for presentation
+
+Hit `h` key on the slide. A list of shortcut keys will be popped up. 
+
+To go back to the slides, hit `h` key again. 
+
+```{r, fig.dim = c(4, 7), out.width = "50%"}
+knitr::include_graphics("images/short-cut.png")
+```
+
+---
+class: middle
+
+## HTML to PDF slides
+
+`to_pdf` funtion of [renderthis](https://github.com/jhelvy/renderthis) package let you render xaringan HTML slides (or .Rmd) to pdf slides.
+
+For more detail, see [this](https://jhelvy.github.io/renderthis/articles/renderthis.html).
+
+`r fa('check',height='20px',fill='lightgreen')`  This function also works with .qmd of Quarto revealjs slides.
+
+<br>
+
+```{r, eval=FALSE, echo=TRUE}
+# === Install package === #
+remotes::install_github("jhelvy/renderthis", dependencies = TRUE)
+
+# === Get PDF slides from HTML slides === #
+renderthis::to_pdf(
+  from = Path/to/an/.Rmd file, # .qmd, .html file, or a UR
+  complex_slides = TRUE, 
+  partial_slides = TRUE
+  )
+```
+???
++ Finally, you can easily convert your HTML slides to a PDF using a renderthis package.
+---
+class: middle, center
+
+<img src="https://y.yarn.co/800c72bf-f939-4c9a-acc0-909b6969027a_text.gif" width="600" height="450"/>
+
+---
+class:center, middle
+name: how
+
+# How to get start to make xaringan presentations?
+<div style='float:left'></div><hr color='#ffcc33' size=2px width=800>
+
+---
+class: middle
+
+Open your RStudio IDE. 
+
+.panelset[ 
+
+<!-- Panel 1 -->
+.panel[.panel-name[Instatall package]
+If you haven't installed the packages yet: 
+```{r, eval=F, echo=TRUE}
+# === install xaringan === #
+remotes::install_github("yihui/xaringan")
+```
+  ] 
+
+<!-- Panel 2 -->
+.panel[.panel-name[Generate template slides]
+
+.pull-left[
+From top-down of New file icon, crick <span style="color:blue">R Markdown</span>.
+
+```{r, fig.dim = c(4, 7), out.width = "60%"}
+knitr::include_graphics("images/select-Rmd.png")
+```
+]
+
+.pull-right[
+<span style="color:blue">From template</span> &rarr; select <span style="color:blue">Ninja Presentation</span>
+
+```{r, fig.dim = c(4, 7), out.width = "80%"}
+knitr::include_graphics("images/select-xaringan.png")
+```
+]
+]
+
+<!-- Panel 3: Knit -->
+.panel[.panel-name[Compile the file]
+
+.left3[
+Then, crick the <span style="color:blue">knit</span> button. 
+
+]
+
+.right7[
+```{r, fig.dim = c(4, 7), out.width = "80%"}
+knitr::include_graphics("images/knit.png")
+```
+]
+]
+
+<!-- Panel 4: Output -->
+.panel[.panel-name[Output]
+
+.left3[
+After knitted the file, the xaringan slides shoudl be popped up. 
+
+]
+
+.right7[
+```{r, fig.dim = c(4, 7), out.width = "80%"}
+knitr::include_graphics("images/final-slide.png")
+```
+]
+]
+
+]
+
+---
+class: middle
+
+
+
+
+
+---
+class: middle
+
+## Basic components of xaringan slides
+
++ `class` : 
++ `---` : for new slides
++ `--`: for incremental slides
++ ???: for presentation notes 
+
+---
+class: middle
+
+
+
+---
+
+class: middle
+
+## YAML header
+
+Likewise usual Rmd, YAML header determines the basic structure of the document. 
+
+.panelset[ 
+.panel[.panel-name[Template]
+```{r, eval=FALSE, echo=TRUE}
+---
+title: "Presentation Ninja"
+subtitle: "⚔<br/>with xaringan"
+author: "Yihui Xie"
+institute: "RStudio, PBC"
+date: "2016/12/12 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```
+  ]
+
+.panel[.panel-name[Add your "own" CSS]
+```{r, eval=FALSE, echo=TRUE}
+---
+title: "Introduction to Making <br> Presentation Slides with xaringan"
+subtitle: "APEC Skill Seminar"
+author: "Shunkei Kakimoto"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - css/umn.css #<<
+      - css/umn-fonts.css #<<
+      - css/my-style.css #<<
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+      ratio: "15:11"
+---
+```
+  ]
+]
+
+---
+class: middle
+
+## What's CSS?
+
+**CSS**: <b>C</b>ascading <b>S</b>tyle <b>S</b>heet
+
+`r fa('check',height='20px',fill='green')`: CSS makes the appearance of your slides stylish. 
+
+`r fa('skull',height='20px',fill='black')`: Creating or modifying a CSS file is a daunting task... 
+???
++ 
+---
+class: center, middle
+name: extension
+
+# Extensions for xaringan presentations
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>
+
+
+---
+background-image: url(https://presentable-user2021.netlify.app/packages/xaringanthemer/featured-hex.png)
+background-size: 100px
+background-position: 95% 5%
+
+
+class: middle, animated slideInLeft fadeOutRight
+
+## xariganthemer
+
+???
++ Fortunatley, instead of creating a CSS file from scratch the xaringanthemer can do this task for us.
+---
+background-image: url(https://presentable-user2021.netlify.app/packages/xaringanextra/featured-hex.png)
+background-size: 100px
+background-position: 90% 35%
+
+class: middle, animated slideInRight fadeOutLeft
+
+## xaringanExtra
+
+`xaringanExtra` package (Check [here](https://pkg.garrickadenbuie.com/xaringanExtra/#/README?id=xaringanextra)) offers extentional functionalities to `xaringan` slides.
+
+```{r, echo=TRUE, eval=F}
+# === Installation === #
+remotes::install_github("gadenbuie/xaringanExtra")
+```
+<br>
+
+Let's see some of the functions in the next slide!
+???
++ There is another package extension for xaringan called xaringanExtra. It offers extensional functionalities.
+---
+class: middle, animated, slideInRight, bounceOutDown
+
+## xaringanExtra
+.panelset[ 
+<!-- Panel 1: Tile View-->
+.panel[.panel-name[Tile View]
+Press `o` key on the slide below. 
+```{r, fig.dim = c(4, 6), out.width = "50%"}
+embed_xaringan(
+  url = "https://pkg.garrickadenbuie.com/xaringanExtra/tile-view/#5"
+  # ratio = "8:6"
+)
+```
+]
+<!-- Panel 2: Panelset -->
+.panel[.panel-name[Panelset]
+```{r, fig.dim = c(4, 6), out.width = "50%"}
+embed_xaringan(
+  url = "https://pkg.garrickadenbuie.com/xaringanExtra/panelset/#1"
+  # ratio = "8:6"
+)
+```
+]
+<!-- Panel 3: Clipboard -->
+.panel[.panel-name[Clipboard]
+```{r, fig.dim = c(4, 6), out.width = "50%"}
+embed_xaringan(
+  url = "https://pkg.garrickadenbuie.com/xaringanExtra/clipboard/#2"
+  # ratio = "8:6"
+)
+```
+]
+<!-- Panel 4: Extra Styles -->
+.panel[.panel-name[Extra Styles]
+```{r, fig.dim = c(4, 6), out.width = "50%"}
+embed_xaringan(
+  url = "https://pkg.garrickadenbuie.com/xaringanExtra/extra-styles/#1"
+  # ratio = "8:6"
+)
+```
+]
+<!-- Panel 5: Animate.css -->
+.panel[.panel-name[Animate.css]
+```{r, fig.dim = c(4, 6), out.width = "50%"}
+embed_xaringan(
+  url = "https://pkg.garrickadenbuie.com/xaringanExtra/animate-css/#1"
+  # ratio = "8:6"
+)
+```
+]
+]
+
+---
+class: middle
+
+.content-box-[**Useful websites for xaringan slides**]
+
+1.The xaringan intro slides: [Presentation Ninja with xaringan](https://slides.yihui.org/xaringan/#1)
+
+`r fa('lightbulb',height='20px',fill='yellow')` Covers the most basics to help you get started
+
+2.[A Bag of R Markdown Tricks](https://slides.yihui.org/2020-genentech-rmarkdown.html#1)
+
+
+---
+class: middle
+background-image: url(https://i3.ytimg.com/vi/DoRR2S5lLvk/maxresdefault.jpg)
+background-size: 200px
+background-position: 90% 5%
+
+### webR Extension for Quarto 
+Check [this](https://github.com/coatless/quarto-webr?tab=readme-ov-file) out. Below is an [example slides](https://tmieno2.github.io/R-as-GIS-workshop/vector_basics.html#/title-slide) using Quarto and webR: 
+```{r, out.width="70%"}
+embed_xaringan(
+  url = "https://tmieno2.github.io/R-as-GIS-workshop/vector_basics.html#/title-slide"
+)
+```
+
+
+???
++ Quarto revealjs slides
++ remark.js is not actively developped anymore...
++ Meanwhile, 
++ Seems like there are lots of templates for Quarto Revealjs slides.
+
+---
+class: center, middle
+
+### Thank you!
+
+You can get my xaringan templates from [`r fa('github',height='20px',fill='black')` @shunkei3](https://github.com/Shunkei3/APEC_xaringanPresentations)
+
+
+
+---

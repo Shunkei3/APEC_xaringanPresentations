@@ -1,0 +1,392 @@
+```{r}
+library(here)
+library(data.table)
+library(foreach)
+library(dplyr)
+library(sf)
+library(tmap)
+library(leaflet)
+library(ggplot2)
+library(magick)
+library(gganimate)
+library(ggtext)
+library(gifski)
+library(gapminder)
+```
+
+```{r, eval=F}
+httpgd::hgd()
+httpgd::hgd_browse()
+```
+
+# Figure 
+
+## Map MN
+
+```{r, eval=FALSE}
+if (!require("pacman")) install.packages("pacman")
+
+# === For example the boundary of MN=== #
+pacman::p_load("tigris", "sf", "dplyr", "tmap", "leaflet")
+
+# --- Download shapefile for MN --- #
+mn_bd <- 
+  states(cb = FALSE, progress_bar = FALSE) %>%
+  filter(STUSPS=="MN")
+
+# --- Visualization with leaflet --- #
+map_mn_bd <- 
+  tmap_leaflet(
+    tm_shape(mn_bd)+
+    tm_borders(col="blue", lwd=2) +
+    tm_text("NAME", size = 2, col="red")
+  ) %>%
+  addProviderTiles("Esri.WorldImagery")
+  # addProviderTiles("NASAGIBS.ViirsEarthAtNight2012")
+```
+
+## Map HPA
+
+```{r}
+# === Digital map of aquifer boundary for the High Plains aquifer === #
+# Download the data from the website of USGS
+
+# download.file(
+#   url = "https://www.sciencebase.gov/catalog/file/get/6314061bd34e36012efa397b?f=__disk__39%2F00%2Fb6%2F3900b621917a747319cd00a5ecb647623a500dae", 
+#   here("Data/hpa_bd.zip")
+#   )
+
+# unzip(
+#   zipfile = here("Data/hpa_bd.zip"),
+#   exdir = here("Data/hpa_bd")
+#   )
+
+hpa_bd <- 
+  st_read(here("Data/hpa_bd/hp_bound2010.shp"), quiet=TRUE)
+
+map_hpa_bd <- 
+  tmap_leaflet(
+    tm_shape(hpa_bd)+
+    tm_polygons(col="blue", alpha=0.5)
+  ) %>%
+  addTiles(group = "OpenStreeMap.Default")
+```
+
+---
+
+# Examples: Animation
+
+## Animation: Utility maximization (General Equilibrium)
+```{r, cache=FALSE}
+# /*===== BC line =====*/
+gen_BC_dt <- function(p_x, p_y, w_x, w_y){
+  x_intc <- w_x + p_y/p_x * w_y
+  y_intc <- p_x/p_y * w_x + w_y
+
+  budget_dt <-
+    data.table(
+      x = seq(0, x_intc, by = 0.1),
+      type = "Budget constraint"
+    ) %>%
+    .[, y := - p_x/p_y * x +  p_x/p_y * w_x + w_y]
+
+  return(budget_dt)
+}
+
+ls_u1_bar <- 2:4
+
+# /*===== BC data =====*/
+bc1_dt <- 
+  foreach(i = 1:length(ls_u1_bar), .combine="rbind") %do%{
+    temp_bc1_dt <- 
+      gen_BC_dt(
+        p_x=1, p_y=1, w_x=4, w_y=0
+      ) %>%
+      .[,`:=`(
+        time = i,
+        u_bar = ls_u1_bar[i]
+        )] %>%
+      setnames(c("x", "y"), c("x1", "y1")) 
+    return(temp_bc1_dt)
+}
+
+# === IC data when u_1 = x_1 y_1 === #
+u1_dt <- 
+  foreach(i = 1:length(ls_u1_bar), .combine="rbind") %do%{
+    # i = 1
+    u_bar <- ls_u1_bar[[i]]
+
+    temp_u1_dt <- 
+      data.table(
+        x1 = seq(0, max(bc1_dt$x1) + 0.5, by=0.05),
+        type = "Indifference curve",
+        time = i,
+        u_bar = ls_u1_bar[i]
+      ) %>%
+      .[, y1 := u_bar/x1] %>%
+      .[y1 <= max(bc1_dt$x1) + 1,]
+
+    return(temp_u1_dt)
+}
+
+p1_u_bc_dt <- rbind(u1_dt, bc1_dt)
+
+# plot(bc1_dt$x1, bc1_dt$y1)
+
+p1_annimate <- 
+  ggplot(data=p1_u_bc_dt)+
+  geom_line(aes(x=x1, y=y1, group=type, color=type))+
+  # --- initial endowment --- #
+  # annotate("point", x = 4, y = 0, colour = "red", size=2)+
+  # --- animation --- #
+  theme_bw() +
+  ggtitle("Where is the utility maximizing bundle?")+
+  xlab(bquote(x[1]))+ ylab(bquote(y[1]))+ 
+  # labs(
+  #   title = ,
+  #   x=bquote(x[1]), y=bquotey[1])
+  # )+
+  theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y=element_blank(),
+    legend.title=element_blank(),
+    legend.position="bottom",
+    # --- title position and size --- #
+    plot.title = element_text(hjust = 0.5, size = 10, face = "bold"),
+    # --- size of title and x, y labels --- #
+    axis.text=element_text(size=5),
+    axis.title=element_text(size=8)
+    )+
+  transition_time(time) +
+  ease_aes('linear')
+
+# anim_save(
+#   here("Data/p1_annimate.gif"), 
+#   p1_annimate
+# )
+```
+
+<!-- \begin{align}
+\max_{x_1, y_1} \quad & U_1(x_1, y_1)=x_1 y_1 \\
+\textrm{s.t.} \quad & p_x x_1 + p_y y_1 = 4 p_x
+\end{align}
+
+```{r, cache=FALSE, fig.dim = c(6, 5), out.width="70%"}
+animate(p1_annimate, fps = 20, end_pause = 5)
+```
+ -->
+
+## Animation: PDF and CDF
+
+```{r, eval=FALSE}
+# /*===== Generate data =====*/
+x <-  seq(-4, 4, 0.05)
+y <- pnorm(x)
+y_d <- dnorm(x)
+
+plot_data <-data.table(x=x, y=y,y_d=y_d)
+
+ls_res <- list()
+ls_cut <- seq(-4,4,by=0.05) 
+# ls_cut <- c(-3,4) 
+for(i in 1:length(ls_cut)){
+  ls_res[[i]] <- 
+    plot_data[x <= ls_cut[i], ] %>%
+    .[, time := ls_cut[i]]
+}
+
+res_all <- 
+  rbindlist(ls_res) %>%
+  .[,c_arrow_x := max(x), by=time] %>%
+  .[,c_arrow_y := .SD[x==c_arrow_x,y], by=time] %>%
+  .[,c_P_pos_x := ifelse(time<0, 0.3, -0.3)] %>%
+  .[,d_arrow_x := 
+    case_when(
+      time < 0 ~ (-4+time)/2 + 0.5, 
+      time >= 0 ~ (-4+time)/2 + 1, 
+    )]
+
+# /*===========================================*/
+#'=  Animation =
+# /*===========================================*/
+
+#/*--------------------------------*/
+#' ## Cumulative (Animation)
+#/*--------------------------------*/
+cdf_annimate <- 
+  ggplot(data=res_all)+
+  # --- base --- #
+  geom_line(data=plot_data, aes(x=x, y=y))+
+  geom_hline(aes(yintercept=0), color="darkgrey")+
+  geom_segment(
+    aes(x = 0, y = 0, xend = 0, yend = 1.05),
+    arrow = arrow(length = unit(0.01, "npc")),
+    color="darkgrey"
+    )+
+  # --- Vertical line --- #
+  geom_vline(
+    aes(xintercept = c_arrow_x), linetype = "dashed", size = 0.5
+    )+
+  # --- vertical red arrow --- #
+  geom_segment(
+    aes(x = c_arrow_x, y = 0, 
+        xend = c_arrow_x, yend = c_arrow_y),
+    arrow = arrow(length = unit(0.02, "npc"), ends = "both"), color="red", size = 2
+    )+
+  # --- horizontal line --- #
+  geom_segment(
+    aes(x = 0, y = c_arrow_y,
+        xend = c_arrow_x, yend = c_arrow_y),
+    linetype="dashed", size = 0.5
+    # arrow = arrow(length = unit(0.01, "npc"))
+    )+
+  # --- text: P --- #
+  geom_text(aes(x=c_P_pos_x, y=c_arrow_y, label="P"),size=6, color="red")+
+  transition_time(time)+
+  theme_bw() +
+  labs(title="CDF", x="X", y="Probability") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+#/*--------------------------------*/
+#' ## Density (Animation)
+#/*--------------------------------*/
+pdf_annimate <- 
+  ggplot(data=res_all)+
+  # --- base --- #
+  geom_line(data=plot_data, aes(x=x, y=y_d))+
+  geom_hline(aes(yintercept=0), color="darkgrey")+
+  geom_segment(
+    aes(x = 0, y = 0, xend = 0, yend = 0.45),
+    arrow = arrow(length = unit(0.01, "npc")),
+    color="darkgrey"
+    )+
+  # --- fill color on the area--- #
+  geom_ribbon(
+    aes(ymax = y_d, ymin = 0, x = x),
+    fill = 'red', alpha = 0.4
+  ) +
+  # --- Vertical line --- #
+  geom_vline(
+    aes(xintercept = c_arrow_x), linetype = "dashed", size = 0.5
+    )+
+  # --- text: P --- #
+  geom_text(aes(x=0, y=-0.05, label="P (Red area)"),size=6, color="red")+
+  # --- arrow --- #
+  geom_segment(
+    aes(x = 0, y = -0.04,
+        xend = d_arrow_x, yend = 0.001),
+    arrow = arrow(length = unit(0.02, "npc"))
+    )+
+  transition_time(time)+
+  theme_bw()+
+  labs(title="PDF", x="X", y="Density") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+#/*--------------------------------*/
+#' ## Animation
+#/*--------------------------------*/
+cdf_gif <- 
+  animate(
+    cdf_annimate,
+     width = 400, height = 420, duration = 15
+     )
+
+pdf_gif <- 
+  animate(
+    pdf_annimate, 
+    width = 400, height = 420, duration = 15
+    )
+
+# === save === #
+anim_save(
+  here("Data/cdf_gif.gif"), 
+  cdf_gif
+  )
+
+
+anim_save(
+  here("Data/cdf_gif.gif"), 
+  pdf_gif
+  )
+
+
+#/*--------------------------------*/
+#' ## Combine two animations
+#/*--------------------------------*/
+cdf_mgif <- image_read(cdf_gif)
+pdf_mgif <- image_read(pdf_gif)
+
+
+cdf_pdf_gif <- 
+  image_append(
+    c(cdf_mgif[1], pdf_mgif[1]),
+    stack = FALSE
+  )
+
+for(i in 2:100){
+  combined <- 
+    image_append(
+      c(cdf_mgif[i], pdf_mgif[i]), 
+      stack = FALSE
+    )
+  cdf_pdf_gif <- c(cdf_pdf_gif, combined)
+}
+
+anim_save(
+  here("Data/cdf_pdf.gif"), 
+  cdf_pdf_gif
+)
+```
+
+## Animation: Measurement Errors
+
+```{r}
+N <- 300
+set.seed(1253)
+data_me <-
+  data.table(
+    x = 3 * rnorm(N)
+  ) %>%
+  .[, x_me := x + 3 * rnorm(N)] %>%
+  .[, y := x + 2 * rnorm(N)] %>%
+  .[, .(y, x, x_me)] %>%
+  melt(id.var = "y") %>%
+  .[, time := ifelse(variable == "x", 1, 2)] %>%
+  .[, type := "me"]
+
+base <-
+  data_me[variable=="x",] %>%
+  .[, `:=`(
+    type = "true",
+    time = NULL
+    )]
+
+data_base <-
+  rbindlist(list(base, base), idcol="time") %>%
+  .[, names(data_me), with = FALSE]
+
+data <- rbind(data_base, data_me)
+
+plot_me <-
+  ggplot(data) +
+  geom_point(data=data, aes(y = y, x = value, color=type), size = 0.6) +
+  geom_smooth(data=data, aes(y = y, x = value, color=type), method = "lm") +
+  xlab("x") +
+  transition_time(time) +
+  theme_bw()+
+  xlab("X") + ylab("Y")+
+  scale_colour_discrete(
+    labels = c(
+      "Observations WITH measurement errors in X",
+      "Observations WITHOUT measurement errors in X"
+    )
+  ) + 
+  theme(
+    plot.title = element_text(hjust = 0.5, size=10),
+    legend.position = "bottom", 
+    legend.box = "vertical",
+    legend.margin = margin()
+  )+
+  labs(color = "")
+```
