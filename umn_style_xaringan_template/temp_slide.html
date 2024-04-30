@@ -4,10 +4,31 @@
     <title>Introduction to Making Presentation Slides   with xaringan</title>
     <meta charset="utf-8" />
     <meta name="author" content="Shunkei Kakimoto" />
-    <meta name="date" content="2024-04-29" />
+    <meta name="date" content="2024-04-30" />
     <script src="libs/header-attrs/header-attrs.js"></script>
-    <link rel="stylesheet" href="css/umn.css" type="text/css" />
-    <link rel="stylesheet" href="css/umn-fonts.css" type="text/css" />
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <script src="libs/fabric/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <script src="libs/mark.js/mark.min.js"></script>
+    <link href="libs/xaringanExtra-search/search.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-search/search.js"></script>
+    <script>window.addEventListener('load', function() { window.xeSearch = new RemarkSearch({"position":"bottom-left","caseSensitive":false,"showIcon":true,"autoSearch":false}) })</script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-progressBar/progress-bar.js"></script>
+    <script src="libs/fitvids/fitvids.min.js"></script>
+    <link rel="stylesheet" href="css/umn-style.css" type="text/css" />
+    <link rel="stylesheet" href="css/umn-style-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-style.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -23,23 +44,132 @@ class: center, middle, inverse, title-slide
 ### Shunkei Kakimoto
 ]
 .date[
-### 2024-04-29
+### 2024-04-30
 ]
 
 ---
 
 
+class: middle
 
 
 
+
+
+
+
+<style>.xe__progress-bar__container {
+  bottom:0;
+  opacity: 1;
+  position:absolute;
+  right:0;
+  left: 0;
+}
+.xe__progress-bar {
+  height: 0.25em;
+  background-color: #ffb71e;
+  width: calc(var(--slide-current) / var(--slide-total) * 100%);
+}
+.remark-visible .xe__progress-bar {
+  animation: xe__progress-bar__wipe 200ms forwards;
+  animation-timing-function: cubic-bezier(.86,0,.07,1);
+}
+@keyframes xe__progress-bar__wipe {
+  0% { width: calc(var(--slide-previous) / var(--slide-total) * 100%); }
+  100% { width: calc(var(--slide-current) / var(--slide-total) * 100%); }
+}</style>
+
+
+
+# Outline
+
+1. [Introduction](#intro)
+2. [What is Xaringan?](#xaringan)
+3. [Example of xaringan slides](#example)
+4. [xaringanExtra](#xaringanExtra)
+
+
+---
+class:center, middle
+name: intro
+
+# Introduction
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1.5px width=800px&gt;&lt;/html&gt;
+---
+class: middle
+
+## Title here
+
++ Item 1
++ Item 2
++ Item 3
+
+---
+class:center, middle
+name: xaringan
+
+# What is Xaringan?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1.5px width=800px&gt;&lt;/html&gt;
+---
+class: middle
+
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://slides.yihui.org/xaringan/#41" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+---
+class: middle
+
+
+
+---
+class:center, middle
+name: example
+
+# Example of xaringan slides
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1.5px width=800px&gt;&lt;/html&gt;
+---
+
+
+
+
+---
+class:center, middle
+name: xaringanExtra
+
+# xaringanExtra
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1.5px width=800px&gt;&lt;/html&gt;
+---
+background-image: url(https://presentable-user2021.netlify.app/packages/xaringanextra/featured-hex.png)
+background-size: 100px
+background-position: 90% 35%
+
+class: middle, animated slideInRight fadeOutLeft
+
+## xaringanExtra
+
+`xaringanExtra` package (Check [here](https://pkg.garrickadenbuie.com/xaringanExtra/#/README?id=xaringanextra)) offers extentional functionalities to `xaringan` slides.
+
+
+```r
+# === Installation === #
+remotes::install_github("gadenbuie/xaringanExtra")
+```
+&lt;br&gt;
+
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
-"highlightLines": true,
+"highlightLanguage": "r",
 "countIncrementalSlides": false,
-"ratio": "16:9"
+"ratio": "15:11"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -118,24 +248,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();
-// adds .remark-code-has-line-highlighted class to <pre> parent elements
-// of code chunks containing highlighted lines with class .remark-code-line-highlighted
-(function(d) {
-  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
-  const preParents = [];
-  const findPreParent = function(line, p = 0) {
-    if (p > 1) return null; // traverse up no further than grandparent
-    const el = line.parentElement;
-    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
-  };
-
-  for (let line of hlines) {
-    let pre = findPreParent(line);
-    if (pre && !preParents.includes(pre)) preParents.push(pre);
-  }
-  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
-})(document);</script>
+})();</script>
 
 <script>
 slideshow._releaseMath = function(el) {

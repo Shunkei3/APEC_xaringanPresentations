@@ -7,17 +7,98 @@ output:
   xaringan::moon_reader:
     lib_dir: libs
     css: 
-      - css/umn.css
-      - css/umn-fonts.css
+      - css/umn-style.css
+      - css/umn-style-fonts.css
+      - css/my-style.css
     nature:
       highlightStyle: github
-      highlightLines: true
+      highlightLanguage: ["r"]
       countIncrementalSlides: false
-      ratio: "16:9"
+      ratio: "15:11"
 ---
 
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
+class: middle
+
+```{r, child = 'setup.rmd', cache = FALSE}
 ```
 
+# Outline
 
+1. [Introduction](#intro)
+2. [What is Xaringan?](#xaringan)
+3. [Example of xaringan slides](#example)
+4. [xaringanExtra](#xaringanExtra)
+
+
+---
+class:center, middle
+name: intro
+
+# Introduction
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1.5px width=800px></html>
+---
+class: middle
+
+## Title here
+
++ Item 1
++ Item 2
++ Item 3
+
+---
+class:center, middle
+name: xaringan
+
+# What is Xaringan?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1.5px width=800px></html>
+---
+class: middle
+
+```{r}
+embed_xaringan(
+  url = "https://slides.yihui.org/xaringan/#41"
+)
+```
+---
+class: middle
+
+
+
+---
+class:center, middle
+name: example
+
+# Example of xaringan slides
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1.5px width=800px></html>
+---
+
+
+
+
+---
+class:center, middle
+name: xaringanExtra
+
+# xaringanExtra
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1.5px width=800px></html>
+---
+background-image: url(https://presentable-user2021.netlify.app/packages/xaringanextra/featured-hex.png)
+background-size: 100px
+background-position: 90% 35%
+
+class: middle, animated slideInRight fadeOutLeft
+
+## xaringanExtra
+
+`xaringanExtra` package (Check [here](https://pkg.garrickadenbuie.com/xaringanExtra/#/README?id=xaringanextra)) offers extentional functionalities to `xaringan` slides.
+
+```{r, echo=TRUE, eval=F}
+# === Installation === #
+remotes::install_github("gadenbuie/xaringanExtra")
+```
+
+---

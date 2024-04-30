@@ -4,15 +4,10 @@ Author: Shunkei Kakimoto
 
 Description: A UW-Madison theme for Xaringan presentations. Modifid based on Joseph V. Casillas's Rutgers theme (https://github.com/jvcasillas/ru_xaringan)
 
-1. I a little bit tweaked the color codes (so that it maches with UMN color ) and structure of slides
-  + For details of UMN colors see: https://university-relations.umn.edu/resources/colors-and-type 
++ 1. I tweaked font types and color schemes so that presentation match with UMN theme. 
+  + For details about UMN colors,  see [this](https://university-relations.umn.edu/resources/colors-and-type ).
 
-2. I added CSS for content box, scrolling through slides, 
-.
-
-3. 
-
-
++ 2. I added another CSS file named `my-style.css`. This contains CSS for content boxes, scrolling through slides, blockuote, and so on. 
 */
 
 /*
@@ -48,10 +43,10 @@ a, a > code {
 }
 
 /* slightly spacing change */
-.inverse h1, .inverse h2, .inverse h3 {
+/*.inverse h1, .inverse h2, .inverse h3 {
   color: #f3f3f3;
   line-height: 1.0em;
-}
+}*/
 
 /* Two-column layout (slightly wider for aspect ration) */
 .left-column {
@@ -142,7 +137,7 @@ thead, tfoot, tr:nth-child(even) { background: none; }
   color: #900021;
   padding-top: 100px;
   font-weight: bold;
-  font-size: 50px;
+  font-size: 45px;
   text-align: center;
   text-shadow: none;
   padding-bottom: 10px;
@@ -152,7 +147,7 @@ thead, tfoot, tr:nth-child(even) { background: none; }
 /* H2 fonts */
 .title-slide h2 {
   color: #ffcc33;
-  font-size: 34px;
+  font-size: 35px;
   text-align: center;
   text-shadow: none;
   padding-bottom: 20px;
@@ -161,7 +156,7 @@ thead, tfoot, tr:nth-child(even) { background: none; }
 
 /* H3 fonts */
 .title-slide h3 {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: normal;
   color: #333333;
   text-align: center;
@@ -206,30 +201,26 @@ thead, tfoot, tr:nth-child(even) { background: none; }
   color: #fff;
 }
 
-/*~~~~~~~~~~~~~~~~~~*/
-/* FINAL SLIDE      */
-/*~~~~~~~~~~~~~~~~~~*/
-
-.title-slide-final {
-  background-color: #272822;
-  color: #fff;
-  padding-left: 100px;
-  text-shadow: 0 0 20px #333;
-  text-align: center;
-}
-
-.title-slide-final h1 {
-  color: #7a0019;
-}
-
 /*~~~~~~~~~~~~~~~~~~~~*/
 /* Global adjustments */
 /*~~~~~~~~~~~~~~~~~~~~*/
 
 /* Add padding to all slides for 16:9 aspect ratio */
-.remark-slide-content {
-  padding-left: 100px;  /* delete this for 4:3 aspect ratio */
+/* delete this for 4:3 aspect ratio */
+/*.remark-slide-content {
+  padding-left: 100px;  
+}*/
+
+.remark-slide-content h1 {
+  font-size: 45px;
 }
+.remark-slide-content h2 {
+  font-size:  35px;
+}
+.remark-slide-content h3 {
+  font-size:  30px;
+}
+
 
 /* Color adjustments for text */
 
@@ -271,17 +262,14 @@ strong {
 /* Color adjustments to headers */
 h1 {
   color: #7a0019;
-  font-size: 28 px;
 }
 
 h2 {
   color: #900021;
-  font-size: 25 px;
 }
 
 h3 {
   color: #333333;
-  font-size: 22.4 px;
 }
 
 /* Font size tags */
