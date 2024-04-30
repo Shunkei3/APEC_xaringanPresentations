@@ -2,7 +2,7 @@
 
 ## Presentation slides
 
-+ **"Introduction to Making Presentation Slides with xaringan"** by Shunkei Kakimoto [[slides](https://shunkei3.github.io/APEC_xaringanPresentations/xaringan/z_presen.html)]
++ **"Introduction to Making Presentation Slides with xaringan"** by Shunkei Kakimoto [[slides](https://shunkei3.github.io/APEC_xaringanPresentations/xaringan/index.html)]
 
 
 + **"Quarto with Reveal.js - Brief Introduction"** by Matt Braaksma [[slides](https://shunkei3.github.io/APEC_xaringanPresentations/quarto/apec_seminar_quarto.html)]
