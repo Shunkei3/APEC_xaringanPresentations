@@ -75,7 +75,43 @@ name: example
 <html><div style='float:left'></div><hr color='#EB811B' size=1.5px width=800px></html>
 ---
 
+---
+class: middle
 
+## Line highlighting
+
+An example of using the trailing comment `#<<` to highlight lines:
+
+
+.pull-left[
+### Code
+
+````markdown
+`r ''````{r}
+library(ggplot2)
+ggplot(mtcars) + 
+  aes(mpg, disp) + 
+  geom_point() +   #<<
+  geom_smooth()    #<<
+```
+````
+]
+
+.pull-right[
+### Output
+
+```{r, eval=FALSE, echo=TRUE}
+library(ggplot2)
+ggplot(mtcars) + 
+  aes(mpg, disp) + 
+  geom_point() +   #<<
+  geom_smooth()    #<<
+```
+]
+
+???
+
++  These symbols allow you to easily use Xaringan's highlighting function. If you want to explain code line by line then this might be helpful because students can clearly know what part of the code you are talking about. 
 
 
 ---

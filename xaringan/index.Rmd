@@ -12,7 +12,7 @@ output:
       - css/my-style.css
     nature:
       highlightStyle: github
-      highlightLines: false
+      highlightLines: nature
       highlightLanguage: ["r"]
       countIncrementalSlides: false
       ratio: "15:11"
@@ -349,20 +349,14 @@ class: middle
 class: middle
 
 ## Figures
-
 .content-box-yellow[Examples: Jensen's inequality]
-
 .panelset[ 
-
 .panel[.panel-name[Example 1 : g(x) is convex]
 .left5[
-
 Suppose that $g(x)=x^2$.
-
 .small-code[
 ```{r, echo=T}
 set.seed(356)
-
 # Create a sequence of X from a uniformal distribution
 x <- seq(0, 10, by=0.01)
 
@@ -401,7 +395,7 @@ fig_convex <-
   ]
   ]
 .right5[
-```{r, echo=F, out.width = "100%"}
+```{r, echo=F, out.width = "80%"}
 fig_convex
 ```
 
@@ -450,7 +444,7 @@ figure_ex2 <-
   ]
   ]
 .right5[
-```{r, echo=F, eval=T, out.width = "100%"}
+```{r, echo=F, eval=T, out.width = "80%"}
 figure_ex2
 ```
 $$\color{blue}{E[g(X)]} \leq \color{darkgreen}{g(E[X])}$$
@@ -461,43 +455,6 @@ $$\color{blue}{E[g(X)]} \leq \color{darkgreen}{g(E[X])}$$
 ???
 + These are some examples showing how the figures look with code I used to create them on the left.  
 
----
-class: middle
-
-## Line highlighting
-
-An example of using the trailing comment `#<<` to highlight lines:
-
-
-.pull-left[
-### Code
-
-````markdown
-`r ''````{r}
-library(ggplot2)
-ggplot(mtcars) + 
-  aes(mpg, disp) + 
-  geom_point() +   #<<
-  geom_smooth()    #<<
-```
-````
-]
-
-.pull-right[
-### Output
-
-```{r, eval=FALSE, echo=TRUE}
-library(ggplot2)
-ggplot(mtcars) + 
-  aes(mpg, disp) + 
-  geom_point() +   #<<
-  geom_smooth()    #<<
-```
-]
-
-???
-
-+  These symbols allow you to easily use Xaringan's highlighting function. If you want to explain code line by line then this might be helpful because students can clearly know what part of the code you are talking about. 
 ---
 class: middle
 
@@ -516,7 +473,7 @@ For example, regression results can be shown like this.
 .panelset[ 
 <!-- Panel 1 -->
 .panel[.panel-name[Code]
-.medium-code[
+.small-code[
 ```{r, echo=TRUE}
 library(modelsummary)
 library(gt)
@@ -548,7 +505,7 @@ modelsummary(
   ]
 <!-- Panel 2 -->
 .panel[.panel-name[Regression result]
-.medium-code[
+.small-code[
 ```{r}
 modelsummary(
   models, 
@@ -589,14 +546,13 @@ cdf_pdf_gif
 + One of the strengths of using HTML based presentations is that we can embed animations into the slides. This animation is showing the relationship between PDF and CDF, normally we learn PDF and CDF with equations but if we show these relationships using animation I think students can more clearly understand the concept.
 
 ---
-
 class: middle
 
 ## Animation with `gganimate`
 
 .content-box-yellow[Example 2: Measurement error bias in linear regression]
 
-```{r, cache=FALSE, fig.dim = c(8, 5)}
+```{r, cache=FALSE, fig.dim = c(8, 5), out.width = "80%"}
 animate(plot_me, fps = 20, duration=10, stard_pause = 10)
 ```
 ???
@@ -673,6 +629,7 @@ For more detail, see [this](https://jhelvy.github.io/renderthis/articles/rendert
 
 <br>
 
+.medium-code[
 ```{r, eval=FALSE, echo=TRUE}
 # === Install package === #
 remotes::install_github("jhelvy/renderthis", dependencies = TRUE)
@@ -684,6 +641,7 @@ renderthis::to_pdf(
   partial_slides = TRUE
   )
 ```
+]
 ???
 + Finally, you can easily convert your HTML slides to a PDF using a renderthis package.
 ---
@@ -708,12 +666,13 @@ Open your RStudio IDE.
 <!-- Panel 1 -->
 .panel[.panel-name[Instatall package]
 If you haven't installed the packages yet: 
+.medium-code[
 ```{r, eval=F, echo=TRUE}
 # === install xaringan === #
 remotes::install_github("yihui/xaringan")
 ```
   ] 
-
+  ]
 <!-- Panel 2 -->
 .panel[.panel-name[Generate template slides]
 
@@ -752,26 +711,16 @@ knitr::include_graphics("images/knit.png")
 <!-- Panel 4: Output -->
 .panel[.panel-name[Output]
 
-.left3[
-After knitted the file, the xaringan slides shoudl be popped up. 
-
-]
-
-.right7[
-```{r, fig.dim = c(4, 7), out.width = "80%"}
-knitr::include_graphics("images/final-slide.png")
+```{r, out.width="70%"}
+embed_xaringan(
+  url = "https://slides.yihui.org/xaringan/#1"
+)
 ```
+<!-- ```{r, fig.dim = c(4, 7), out.width = "80%"}
+knitr::include_graphics("images/final-slide.png")
+``` -->
+  ]
 ]
-]
-
-]
-
----
-class: middle
-
-
-
-
 
 ---
 class: middle
@@ -779,14 +728,9 @@ class: middle
 ## Basic components of xaringan slides
 
 + `class` : 
-+ `---` : for new slides
-+ `--`: for incremental slides
++ `---` : Every new slide is created under three dashes.
++ `--`: to build incremental slides [here](https://slides.yihui.org/xaringan/incremental.html#2)
 + ???: for presentation notes 
-
----
-class: middle
-
-
 
 ---
 
@@ -798,6 +742,7 @@ Likewise usual Rmd, YAML header determines the basic structure of the document.
 
 .panelset[ 
 .panel[.panel-name[Template]
+.small-code[
 ```{r, eval=FALSE, echo=TRUE}
 ---
 title: "Presentation Ninja"
@@ -815,8 +760,10 @@ output:
 ---
 ```
   ]
+  ]
 
 .panel[.panel-name[Add your "own" CSS]
+.small-code[
 ```{r, eval=FALSE, echo=TRUE}
 ---
 title: "Introduction to Making <br> Presentation Slides with xaringan"
@@ -827,15 +774,18 @@ output:
   xaringan::moon_reader:
     lib_dir: libs
     css: 
-      - css/umn.css #<<
-      - css/umn-fonts.css #<<
-      - css/my-style.css #<<
+      - css/umn-style.css
+      - css/umn-style-fonts.css
+      - css/my-style.css
     nature:
       highlightStyle: github
+      highlightLines: false
+      highlightLanguage: ["r"]
       countIncrementalSlides: false
       ratio: "15:11"
 ---
 ```
+  ]
   ]
 ]
 
@@ -863,19 +813,45 @@ name: extension
 ---
 background-image: url(https://presentable-user2021.netlify.app/packages/xaringanthemer/featured-hex.png)
 background-size: 100px
-background-position: 95% 5%
+background-position: 95% 2%
 
 
 class: middle, animated slideInLeft fadeOutRight
 
 ## xariganthemer
 
+For more detail about `xariganthemer` package, see [this](https://pkg.garrickadenbuie.com/xaringanthemer/index.html). creates a css file with your favorite theme. 
+
+.medium-code[
+```{r, echo=TRUE, eval=F}
+# === Installation === #
+remotes::install_github("gadenbuie/xaringanthemer")
+```
+]
+
+
+For example, using `style_duo_accent()` like
+.medium-code[
+```{r, echo=TRUE, eval=F}
+style_duo_accent_inverse(
+  primary_color = "#035AA6", 
+  secondary_color = "#03A696"
+)
+```
+]
+you can make slides looks like this
+
+```{r, fig.dim = c(4, 7), out.width = "80%"}
+knitr::include_graphics("https://raw.githubusercontent.com/gadenbuie/xaringanthemer/assets/example_duo_accent_inverse.png")
+```
+
 ???
 + Fortunatley, instead of creating a CSS file from scratch the xaringanthemer can do this task for us.
+
 ---
 background-image: url(https://presentable-user2021.netlify.app/packages/xaringanextra/featured-hex.png)
 background-size: 100px
-background-position: 90% 35%
+background-position: 90% 30%
 
 class: middle, animated slideInRight fadeOutLeft
 
@@ -883,10 +859,12 @@ class: middle, animated slideInRight fadeOutLeft
 
 `xaringanExtra` package (Check [here](https://pkg.garrickadenbuie.com/xaringanExtra/#/README?id=xaringanextra)) offers extentional functionalities to `xaringan` slides.
 
+.medium-code[
 ```{r, echo=TRUE, eval=F}
 # === Installation === #
 remotes::install_github("gadenbuie/xaringanExtra")
 ```
+]
 <br>
 
 Let's see some of the functions in the next slide!
@@ -947,18 +925,6 @@ embed_xaringan(
 
 ---
 class: middle
-
-.content-box-[**Useful websites for xaringan slides**]
-
-1.The xaringan intro slides: [Presentation Ninja with xaringan](https://slides.yihui.org/xaringan/#1)
-
-`r fa('lightbulb',height='20px',fill='yellow')` Covers the most basics to help you get started
-
-2.[A Bag of R Markdown Tricks](https://slides.yihui.org/2020-genentech-rmarkdown.html#1)
-
-
----
-class: middle
 background-image: url(https://i3.ytimg.com/vi/DoRR2S5lLvk/maxresdefault.jpg)
 background-size: 200px
 background-position: 90% 5%
@@ -984,7 +950,3 @@ class: center, middle
 ### Thank you!
 
 You can get my xaringan templates from [`r fa('github',height='20px',fill='black')` @shunkei3](https://github.com/Shunkei3/APEC_xaringanPresentations)
-
-
-
----

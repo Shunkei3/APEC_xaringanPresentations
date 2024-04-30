@@ -10,11 +10,6 @@ Description: A UW-Madison theme for Xaringan presentations. Modifid based on Jos
 + 2. I added another CSS file named `my-style.css`. This contains CSS for content boxes, scrolling through slides, blockuote, and so on. 
 */
 
-/*
-CSS for xaringan slides in RU flavor
-Author: Joseph V. Casillas
-Updated: 03/06/2018
-
 
 /* Package defaults that we slightly tweak */
 a, a > code {
