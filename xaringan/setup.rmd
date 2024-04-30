@@ -18,8 +18,26 @@ opts_chunk$set(
 )
 ```
 
+
+```{r libraries, include = F, cache = F}
+#--- load packages ---#
+suppressMessages(library(data.table))
+suppressMessages(library(DT))
+suppressMessages(library(tmap))
+suppressMessages(library(extrafont))
+suppressMessages(library(ggthemes))
+suppressMessages(library(RColorBrewer))
+suppressMessages(library(parallel))
+suppressMessages(library(tidyverse))
+suppressMessages(library(flipbookr))
+suppressMessages(library(flair))
+suppressMessages(library(fontawesome))
+suppressMessages(library(xaringanExtra))
+suppressMessages(library(RefManageR))
+```
+
+
 ```{r xaringanExtra, echo=FALSE, cache = F}
-library(xaringanExtra)
 # You can do like this. 
 # xaringanExtra::use_xaringan_extra(
 #   c(
@@ -49,31 +67,12 @@ use_progress_bar(
 )
 ```
 
-```{r libraries, include = F, cache = F}
-#--- load packages ---#
-suppressMessages(library(data.table))
-suppressMessages(library(DT))
-suppressMessages(library(tictoc))
-suppressMessages(library(tmap))
-suppressMessages(library(extrafont))
-suppressMessages(library(ggthemes))
-suppressMessages(library(RColorBrewer))
-suppressMessages(library(parallel))
-suppressMessages(library(tidyverse))
-suppressMessages(library(flipbookr))
-suppressMessages(library(flair))
-suppressMessages(library(fontawesome))
-```
 
-```{r setup, include=FALSE, cache = FALSE}
+
+```{r setup-bib, include=FALSE, cache = FALSE}
 #/*--------------------------------*/
 #' ## # For citation
 #/*--------------------------------*/
-options(htmltools.dir.version = FALSE)
-
-# /*===== Reference =====*/
-suppressMessages(library(RefManageR))
-
 BibOptions(
   check.entries = FALSE,
   bib.style = "authoryear",
